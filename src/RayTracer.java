@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+
 
 import javax.imageio.ImageIO;
 
@@ -200,7 +200,7 @@ public class RayTracer {
 
                 // It is recommended that you check here that the scene is valid,
                 // for example camera settings and all necessary materials were defined.
-
+		r.close();
 		System.out.println("Finished parsing scene file " + sceneFileName);
 
 	}
@@ -214,9 +214,9 @@ public class RayTracer {
 
 		// Create a byte array to hold the pixel data:
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
-
-
-                // Put your ray tracing code here!
+		Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
+		
+				// Put your ray tracing code here!
                 //
                 // Write pixel color values in RGB format to rgbData:
                 // Pixel [x, y] red component is in rgbData[(y * this.imageWidth + x) * 3]
@@ -280,6 +280,5 @@ public class RayTracer {
 	public static class RayTracerException extends Exception {
 		public RayTracerException(String msg) {  super(msg); }
 	}
-
 
 }

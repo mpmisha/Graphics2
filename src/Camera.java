@@ -106,7 +106,7 @@ public class Camera {
 	}
 
 	public void setRecursionLevel(int recursionLevel) {
-		recursionLevel = recursionLevel;
+		this.recursionLevel = recursionLevel;
 	}
 	
 	
