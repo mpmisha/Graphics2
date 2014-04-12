@@ -14,6 +14,12 @@ import javax.imageio.ImageIO;
 
 /**
  *  Main class for ray tracing exercise.
+ *  
+ *  1) constructRayFomPixel								-Michael
+ *	2) find-intersection 								-Hadar
+ *  3)each matirial implements nearstIntersection 		- Hadar
+ *  4)calcColor											-Michael
+ *  
  */
 public class RayTracer {
 	
@@ -104,7 +110,7 @@ public class RayTracer {
 				{
 					Point positionPoint = new Point(Double.parseDouble(params[0]),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
 					Point lookAtPoint = new Point(Double.parseDouble(params[3]),Double.parseDouble(params[4]),Double.parseDouble(params[5]));
-					Point upVector = new Point(Double.parseDouble(params[6]),Double.parseDouble(params[7]),Double.parseDouble(params[8]));
+					Vector upVector = new Vector(Double.parseDouble(params[6]),Double.parseDouble(params[7]),Double.parseDouble(params[8]));
 					double screenDist = Double.parseDouble(params[9]);
 					double screenWidth = Double.parseDouble(params[10]);
 					
@@ -201,8 +207,13 @@ public class RayTracer {
                 // It is recommended that you check here that the scene is valid,
                 // for example camera settings and all necessary materials were defined.
 		r.close();
+		
+		//merge each surface with its material
+		for (int i = 0; i < surfaceList.size(); i++) {
+			surfaceList.get(i).setMaterial(materialList.get(i));
+		}
+		
 		System.out.println("Finished parsing scene file " + sceneFileName);
-
 	}
 
 	/**
@@ -214,7 +225,17 @@ public class RayTracer {
 
 		// Create a byte array to hold the pixel data:
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
-		Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
+		//Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
+			for (int y = 0; y < this.imageHeight; y++) {
+				for (int x = 0; x < this.imageWidth; x++) {
+					
+					Ray ray = camera.constructRayFomPixel(x,y);
+					
+				}
+				
+			}
+		
+		
 		
 				// Put your ray tracing code here!
                 //
