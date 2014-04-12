@@ -31,6 +31,7 @@ public class RayTracer {
 	 */
 	public static void main(String[] args) {
 		//test comment
+		//and another one
 		try {
 
 			RayTracer tracer = new RayTracer();
