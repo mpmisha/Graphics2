@@ -15,6 +15,12 @@ public class Ellipsoid extends Surface{
 	public void setRotationMatrix(int[][] rotationMatrix) {
 		this.rotationMatrix = rotationMatrix;
 	}
+
+	@Override
+	public Intersection nearestIntersection(Ray ray) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	

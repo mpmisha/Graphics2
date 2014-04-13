@@ -34,8 +34,8 @@ public abstract class Surface {
 	public void setMat_idx(int mat_idx) {
 		this.mat_idx = mat_idx;
 	}
-	
-	
+
+	public abstract Intersection nearestIntersection(Ray ray);
 	
 	
 }

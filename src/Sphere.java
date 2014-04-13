@@ -21,6 +21,12 @@ public class Sphere extends Surface {
 	public String toString() {
 		return "Sphere [radius=" + radius + "]";
 	}
+
+	@Override
+	public Intersection nearestIntersection(Ray ray) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

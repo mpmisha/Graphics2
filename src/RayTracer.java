@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+
 import javax.imageio.ImageIO;
+
 
 /**
  *  Main class for ray tracing exercise.
@@ -260,6 +262,28 @@ public class RayTracer {
 		System.out.println("Saved file " + outputFileName);
 
 	}
+	
+	public Intersection findIntersection(Ray ray){
+		double minD = Double.POSITIVE_INFINITY;
+		Intersection minSurface = null;
+		for (Surface surface :  surfaceList) {
+			Intersection hit = surface.nearestIntersection(ray);
+			if (hit != null) {
+				double d = hit.distance;
+
+				if (minD > d) {
+					minD = d;
+					minSurface = hit;
+				}
+			}
+		}
+
+		if (Double.isInfinite(minD))
+			return null;
+
+		return minSurface;
+	}
+
 
 
 
@@ -301,5 +325,6 @@ public class RayTracer {
 	public static class RayTracerException extends Exception {
 		public RayTracerException(String msg) {  super(msg); }
 	}
-
+	
+	
 }

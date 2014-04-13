@@ -19,6 +19,12 @@ public class Plane extends Surface {
 	public String toString() {
 		return "Plane [offset=" + offset + "]";
 	}
+
+	@Override
+	public Intersection nearestIntersection(Ray ray) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }
