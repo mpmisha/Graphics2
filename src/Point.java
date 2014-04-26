@@ -1,4 +1,5 @@
 
+
 public class Point {
 	private double x;
 	private double y;
@@ -10,10 +11,28 @@ public class Point {
 		this.z=z;
 	}
 	
+	public Point(Point other){
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
+	}
+	
+	
+	public void mac(double s, Vector a) {
+		x += s * a.getX();
+        y += s * a.getY();
+        z += s * a.getZ();
+	}
+
+	
+	
+	
 	public Point(){
 		this(0,0,0);
 	}
 
+	
+	
 	public double getX() {
 		return x;
 	}
