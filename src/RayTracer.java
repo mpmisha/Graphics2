@@ -38,8 +38,6 @@ public class RayTracer {
 	 * Runs the ray tracer. Takes scene file, output image file and image size as input.
 	 */
 	public static void main(String[] args) {
-		//test comment
-		//and another one
 		try {
 
 			RayTracer tracer = new RayTracer();
@@ -195,8 +193,6 @@ public class RayTracer {
 					lightList.add(light);
 					if (debug) System.out.println(light.toString());
 					
-                                        // Add code here to parse light parameters
-
 					System.out.println(String.format("Parsed light (line %d)", lineNum));
 				}
 				else
@@ -212,7 +208,7 @@ public class RayTracer {
 		
 		//merge each surface with its material
 		for (int i = 0; i < surfaceList.size(); i++) {
-			surfaceList.get(i).setMaterial(materialList.get(i));
+			surfaceList.get(i).setMaterial(materialList.get(surfaceList.get(i).getMat_idx()));
 		}
 		
 		System.out.println("Finished parsing scene file " + sceneFileName);
@@ -230,7 +226,6 @@ public class RayTracer {
 		//Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
 			for (int y = 0; y < this.imageHeight; y++) {
 				for (int x = 0; x < this.imageWidth; x++) {
-					
 					Ray ray = camera.constructRayFomPixel(x,y);
 					
 				}
