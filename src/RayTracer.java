@@ -236,13 +236,9 @@ public class RayTracer {
 					Ray ray = camera.constructRayFomPixel((double)x,(double)y);
 					Intersection hit = findIntersection(ray);
 					if (hit==null) {
-						hitColor = new Color(55,0,55);
+						hitColor = new Color(255,0,0);
 					}else{
 						hitColor = Color.getColor(hit);	
-					}
-					
-					if (DEBUG && x==11 && y==19){
-						System.out.println("debug");
 					}
 					colorVector = hitColor.ReturnColorBytes();
 					
