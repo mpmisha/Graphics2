@@ -15,6 +15,7 @@ public class Camera {
 	private Color backgroundColor;
 	private int shadowRays;
 	private int recursionLevel;
+	private double angle;
 	
 	public Camera(Point position, Point lookAtPoint, Vector upVector,
 			double screenDistance, double screenWidth) {
@@ -28,6 +29,9 @@ public class Camera {
 		this.backgroundColor = null;
 		this.shadowRays = 0;
 		this.recursionLevel = 0;
+		this.angle = (float)Math.atan((0.5f * screenWidth) / screenDistance);
+		
+		
 	}
 	public Camera(Point position, Point lookAtPoint, Vector upVector,
 			double screenDistance, double screenWidth, Color backgroundColor,
@@ -42,6 +46,7 @@ public class Camera {
 		this.backgroundColor = backgroundColor;
 		this.shadowRays = shadowRays;
 		this.recursionLevel = recursionLevel;
+		this.angle = (float)Math.atan((0.5f * screenWidth) / screenDistance);
 	}
 	public Point getPosition() {
 		return position;
@@ -116,22 +121,49 @@ public class Camera {
 	 * and up vector
 	 * 
 	 * */
-	public Ray constructRayFomPixel(double x, double y) {
-		Point P0 = this.position;
-		Vector towards = new Vector(this.lookAtPoint);
-		Vector up = this.upVector;
-		Vector right = towards.crossProd(up);
+	public Ray constructRayFomPixel(double x, double y) { //TODO: Michael Need to Complete according to Barak's code
 		
-		towards.scale(this.screenDistance); 		
-		right.scale(x-(double) this.screenWidth/2);	
-		up.scale(y-(double) this.screenHeight/2);		
 		
-		lookAtPoint.add(towards);	//move to screen
-		lookAtPoint.add(up);		//move up
-		lookAtPoint.add(right);		//move right
+		float rightCoeff = (float)(((float)(x+0.5f) / 1) * 2 * screenDistance * (float)Math.tan(angle));
+		float upCoeff = (float)(((float)(y+0.5f) / 1) * 2 * screenDistance * (float)Math.tan(angle));
+	
+		Vector P1 = new Vector();
+		Vector P = Math3D.VectorAddition(P1, Math3D.MultiplyScalar(right, rightCoeff));
+		P = Math3D.VectorAddition(P, Math3D.MultiplyScalar(up, upCoeff));
 		
-									//now were at the x,y point on the screen
-		Vector rayVector = new Vector(lookAtPoint,P0); 
-		return new Ray(P0,rayVector);
+		Vector V = Math3D.VectorSubstraction(P, position);
+		V.Normalize();
+		
+		return new Ray(position, V, P);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		Point P0 = this.position;
+//		Vector towards = new Vector(this.lookAtPoint);
+//		Vector up = this.upVector;
+//		Vector right = towards.crossProd(up);
+//		
+//		towards.scale(this.screenDistance); 		
+//		right.scale(x-(double) this.screenWidth/2);	
+//		up.scale(y-(double) this.screenHeight/2);		
+//		
+//		lookAtPoint.add(towards);	//move to screen
+//		lookAtPoint.add(up);		//move up
+//		lookAtPoint.add(right);		//move right
+//		
+//									//now were at the x,y point on the screen
+//		Vector rayVector = new Vector(lookAtPoint,P0); 
+//		return new Ray(P0,rayVector);
 	}
 }

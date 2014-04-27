@@ -24,64 +24,32 @@ public class Sphere extends Surface {
 
 	@Override
 	public Intersection nearestIntersection(Ray ray) {
-		double b;
-		double c;
+		double b,c,squred_d,squred_r;
+		
 		double disc, solution;
-		double t1, t2;
+		double t1, t2,t_ca,t_hc, t, t_min;
 		
 		Vector distance = new Vector(ray.getOrigin(), this.getCenterPoint());
+		t_ca = distance.dotProdcut(ray.getDiraction());
 		
-		Vector distanceSquared = new Vector(distance);
-		distanceSquared.multiplyByScalar(2);
-		b = distanceSquared.dotProdcut(ray.getDiraction());
-		c = distance.getLength() - Math.pow(radius, 2);
-
-		disc = b * b - 4 * c;
-	
-		if (disc < 0) {
-			return null;
-		}
+		if(t_ca<0) return null;
 		
-		if (b < 0) {
-			solution = (-b - Math.sqrt(disc)) / 2;
-		} else {
-			solution = (-b + Math.sqrt(disc)) / 2;
-		}
-	
-		t1 = solution;
-		t2 = c / solution;
-
-		if (t1 < t2) {
-			if (t2 < 0) {
-				return null;
-			}
-
-			if (t1 < 0) {
-				Point intersection = new Point(ray.getOrigin());
-				intersection.mac(t2, ray.getDiraction());
-				return new Intersection(t2, intersection, this);
-			}
-
-			Point intersection = new Point(ray.getOrigin());
-			intersection.mac(t1, ray.getDiraction());
-			return new Intersection(t1, intersection, this);
-			
-		} else {
-			if (t1 < 0) {
-				return null;
-			}
-
-			if (t2 < 0) {
-				Point intersection = new Point(ray.getOrigin());
-				intersection.mac(t1, ray.getDiraction());
-				return new Intersection(t1, intersection, this);
-			}
-
-			Point intersection = new Point(ray.getOrigin());
-			intersection.mac(t2, ray.getDiraction());
-			return new Intersection(t2, intersection, this);
-
-		}
+		squred_d = distance.dotProdcut(distance)-t_ca*t_ca;
+		squred_r= this.getRadius()*this.getRadius();
+		if(squred_d>squred_r) return null;
+		
+		t_hc= Math.sqrt(squred_r-squred_d);	
+		t1 = t_ca - t_hc;
+		t2 = t_ca + t_hc;
+		
+		t_min = Math.min(t1, t2);
+		
+		Point intersection = new Point(ray.getOrigin());
+		intersection.mac(t_min, ray.getDiraction());
+		return new Intersection(t_min, intersection, this);
+		
+		
+		
 	}
 	
 	

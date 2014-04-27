@@ -50,9 +50,9 @@ public class Vector {
 		this.y*=scalar;
 		this.z*=scalar;
 	}
-
+	
 	public double dotProdcut(Vector other) {
-		return x * other.x + y * other.y + z * other.z;
+		return (this.x * other.getX() + this.y * other.getY() + this.z * other.getZ());
 	}
 	
 	public double getX() {
