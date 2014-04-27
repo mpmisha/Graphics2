@@ -57,10 +57,29 @@ public class Point {
 		this.z = z;
 	}
 
+	public void add(Vector v){
+		this.x +=v.getX();
+		this.y +=v.getY();
+		this.z +=v.getZ();
+	}
+	
+	public void add(Point p){
+		this.x +=p.getX();
+		this.y +=p.getY();
+		this.z +=p.getZ();
+	}
+	public void add(double d){
+		this.x +=d;
+		this.y +=d;
+		this.z +=d;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Point [" + x + "," + y + "," + z + "]";
 	}
+	
 	
 	
 	

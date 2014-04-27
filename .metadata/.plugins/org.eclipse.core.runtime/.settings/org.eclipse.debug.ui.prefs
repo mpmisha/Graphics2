@@ -1,0 +1,4 @@
+#Sun Apr 27 13:49:16 IDT 2014
+eclipse.preferences.version=1
+preferredTargets=org.eclipse.ptp.debug.parallel.breakpoint\:org.eclipse.ptp.debug.parallel.breakpoint|
+org.eclipse.debug.ui.PREF_LAUNCH_PERSPECTIVES=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<launchPerspectives/>\n

@@ -23,9 +23,10 @@ import javax.imageio.ImageIO;
  *  4)calcColor											-Michael
  *  
  */
+
 public class RayTracer {
+	public static final boolean DEBUG=true;
 	
-	public boolean debug=true;
 	
 	public int imageWidth;
 	public int imageHeight;
@@ -38,6 +39,8 @@ public class RayTracer {
 	 * Runs the ray tracer. Takes scene file, output image file and image size as input.
 	 */
 	public static void main(String[] args) {
+		//test comment
+		//and another one
 		try {
 
 			RayTracer tracer = new RayTracer();
@@ -54,8 +57,8 @@ public class RayTracer {
 
 			if (args.length > 3)
 			{
-				tracer.imageWidth = Integer.parseInt(args[2]);
-				tracer.imageHeight = Integer.parseInt(args[3]);
+				if (!DEBUG) tracer.imageWidth = Integer.parseInt(args[2]);
+				if (!DEBUG) tracer.imageHeight = Integer.parseInt(args[3]);
 			}
 
 
@@ -63,6 +66,7 @@ public class RayTracer {
 			tracer.parseScene(sceneFileName);
 
 			// Render scene:
+			if (DEBUG) System.out.println("starting renderScence");
 			tracer.renderScene(outputFileName);
 
 //		} catch (IOException e) {
@@ -129,7 +133,7 @@ public class RayTracer {
 					camera.setBackgroundColor(bgColor);
 					camera.setShadowRays(shadowRays);
 					camera.setRecursionLevel(recLevel);
-					if (debug) System.out.println(camera.toString());
+					if (DEBUG) System.out.println(camera.toString());
 					System.out.println(String.format("Parsed general settings (line %d)", lineNum));
 				}
 				else if (code.equals("mtl"))
@@ -144,7 +148,7 @@ public class RayTracer {
 					Material material = new Material(diffuseColor,specularColor,phongCoeffticient,refColor,trans);
 					materialList.add(material);
                                        
-					if (debug)System.out.println(material.toString());
+					if (DEBUG)System.out.println(material.toString());
 					System.out.println(String.format("Parsed material (line %d)", lineNum));
 				}
 				else if (code.equals("sph"))
@@ -157,7 +161,7 @@ public class RayTracer {
 					Sphere sphere = new Sphere(null, centerPoint, mat_idx, radius);
 					
 					surfaceList.add(sphere);
-					if (debug) System.out.println(sphere.toString());
+					if (DEBUG) System.out.println(sphere.toString());
 					System.out.println(String.format("Parsed sphere (line %d)", lineNum));
 				}
 				else if (code.equals("pln"))
@@ -169,7 +173,7 @@ public class RayTracer {
 					Plane plane = new Plane(null, centerPoint, mat_idx, offset);
 					surfaceList.add(plane);
                                         
-					if (debug) System.out.println(plane.toString());
+					if (DEBUG) System.out.println(plane.toString());
 					System.out.println(String.format("Parsed plane (line %d)", lineNum));
 				}
 				else if (code.equals("elp"))
@@ -191,8 +195,10 @@ public class RayTracer {
 					Light light = new Light(position, color, specularIntensity, shadowIntensity, radius);
 					
 					lightList.add(light);
-					if (debug) System.out.println(light.toString());
+					if (DEBUG) System.out.println(light.toString());
 					
+                                        // Add code here to parse light parameters
+
 					System.out.println(String.format("Parsed light (line %d)", lineNum));
 				}
 				else
@@ -208,7 +214,7 @@ public class RayTracer {
 		
 		//merge each surface with its material
 		for (int i = 0; i < surfaceList.size(); i++) {
-			surfaceList.get(i).setMaterial(materialList.get(surfaceList.get(i).getMat_idx()));
+			surfaceList.get(i).setMaterial(materialList.get(i));
 		}
 		
 		System.out.println("Finished parsing scene file " + sceneFileName);
@@ -220,16 +226,30 @@ public class RayTracer {
 	public void renderScene(String outputFileName)
 	{
 		long startTime = System.currentTimeMillis();
-
+		Color colorVector;
 		// Create a byte array to hold the pixel data:
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
+		Color hitColor = new Color();
 		//Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
 			for (int y = 0; y < this.imageHeight; y++) {
 				for (int x = 0; x < this.imageWidth; x++) {
-					Ray ray = camera.constructRayFomPixel(x,y);
+					Ray ray = camera.constructRayFomPixel((double)x,(double)y);
+					Intersection hit = findIntersection(ray);
+					if (hit==null) {
+						hitColor = new Color(55,0,55);
+					}else{
+						hitColor = Color.getColor(hit);	
+					}
 					
+					if (DEBUG && x==11 && y==19){
+						System.out.println("debug");
+					}
+					colorVector = hitColor.ReturnColorBytes();
+					
+					rgbData[y*this.imageWidth*3 + x*3] = (byte)   colorVector.getR();
+					rgbData[y*this.imageWidth*3 + x*3+1] = (byte) colorVector.getG();
+					rgbData[y*this.imageWidth*3 + x*3+2] = (byte) colorVector.getB();
 				}
-				
 			}
 		
 		
@@ -265,7 +285,6 @@ public class RayTracer {
 			Intersection hit = surface.nearestIntersection(ray);
 			if (hit != null) {
 				double d = hit.distance;
-
 				if (minD > d) {
 					minD = d;
 					minSurface = hit;
@@ -275,7 +294,6 @@ public class RayTracer {
 
 		if (Double.isInfinite(minD))
 			return null;
-
 		return minSurface;
 	}
 

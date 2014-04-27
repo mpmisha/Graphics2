@@ -35,6 +35,19 @@ public class Color {
 		return "Color [" + R + "," + G + "," + B + "]";
 	}
 	
+	public Color ReturnColorBytes() {
+		if(this.R > 1.0f) this.R = 1.0f;
+		if(this.G > 1.0f) this.G = 1.0f;
+		if(this.B > 1.0f) this.B = 1.0f;
+		return new Color((float)Math.floor(this.R * 255), (float)Math.floor(this.G * 255), (float)Math.floor(this.B * 255));
+	}
+	
+	public static Color getColor(Intersection hit){
+		// a temporary imp of calculating the color.
+		return hit.surface.getMaterial().getDiffuseColor();
+		
+	}
+	
 	
 	
 	

@@ -23,6 +23,20 @@ public class Vector {
     	this.length = Math.sqrt(x*x + y*y + z*z);
     }
 	
+	public Vector(Point dest, Vector direction) {
+    	x = dest.getX() - direction.getX();
+    	y = dest.getY() - direction.getY();
+    	z = dest.getZ() - direction.getZ();
+    	this.length = Math.sqrt(x*x + y*y + z*z);
+    }
+	
+	
+	public Vector(Point p){
+		x =p.getX();
+		y= p.getY();
+		z=p.getZ();
+	}
+	
 	public Vector(Vector other){
 		this.x = other.x;
 		this.y = other.y;
@@ -73,11 +87,27 @@ public class Vector {
 		this.length = length;
 	}
 	
+	public void scale(double d){		
+		this.x *= d;
+		this.y *= d;
+		this.z *= d;
+	}
 	
+	public void scale(Vector v){
+		this.x *=v.getX();
+		this.y *=v.getY();
+		this.z *=v.getZ();		
+	}
+	public void scale(Point p){
+		this.x *=p.getX();
+		this.y *=p.getY();
+		this.z *=p.getZ();		
+	}
 	
-	
-	
-	
-	
-	
+	public Vector crossProd(Vector other) {	
+		return new Vector(
+                this.y * other.z - this.z * other.y,
+                this.z * other.x - this.x * other.z,
+                this.x * other.y - this.y * other.x);
+	}
 }

@@ -11,6 +11,7 @@ public class Camera {
 	private Vector upVector; 
 	private double screenDistance;
 	private double screenWidth;
+	private double screenHeight;
 	private Color backgroundColor;
 	private int shadowRays;
 	private int recursionLevel;
@@ -23,6 +24,7 @@ public class Camera {
 		this.upVector = upVector;
 		this.screenDistance = screenDistance;
 		this.screenWidth = screenWidth;
+		this.screenHeight= screenWidth;
 		this.backgroundColor = null;
 		this.shadowRays = 0;
 		this.recursionLevel = 0;
@@ -36,6 +38,7 @@ public class Camera {
 		this.upVector = upVector;
 		this.screenDistance = screenDistance;
 		this.screenWidth = screenWidth;
+		this.screenHeight= screenWidth;
 		this.backgroundColor = backgroundColor;
 		this.shadowRays = shadowRays;
 		this.recursionLevel = recursionLevel;
@@ -78,6 +81,13 @@ public class Camera {
 	public void setScreenWidth(double screenWidth) {
 		this.screenWidth = screenWidth;
 	}
+	public double getScreenHeight() {
+		return screenHeight;
+	}
+	public void setScreenHeight(double screenHeight) {
+		this.screenHeight = screenHeight;
+	}
+	
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
@@ -106,27 +116,22 @@ public class Camera {
 	 * and up vector
 	 * 
 	 * */
-	public Ray constructRayFomPixel(int x, int y) {
-		Vector scaled_x_y;
-		double xMove,yMove;
-		Ray result = new Ray();
-		//center of window
-		Point lookAt_x_y = new Point(lookAtPoint.getX(),lookAtPoint.getY(),lookAtPoint.getZ());
-		//find coordiantes of x,y
+	public Ray constructRayFomPixel(double x, double y) {
+		Point P0 = this.position;
+		Vector towards = new Vector(this.lookAtPoint);
+		Vector up = this.upVector;
+		Vector right = towards.crossProd(up);
 		
-		xMove = lookAt_x_y.getX()-(screenWidth/2-x);
-		yMove = lookAt_x_y.getY()-(screenWidth/2-y);
+		towards.scale(this.screenDistance); 		
+		right.scale(x-(double) this.screenWidth/2);	
+		up.scale(y-(double) this.screenHeight/2);		
 		
-		scaled_x_y = new Vector(xMove,yMove,0.0);
-		result.setOrigin(position);
-		result.setDiraction(scaled_x_y);
+		lookAtPoint.add(towards);	//move to screen
+		lookAtPoint.add(up);		//move up
+		lookAtPoint.add(right);		//move right
 		
-		return result;
+									//now were at the x,y point on the screen
+		Vector rayVector = new Vector(lookAtPoint,P0); 
+		return new Ray(P0,rayVector);
 	}
-	
-	
-	
-	
-	
-	
 }
