@@ -2,13 +2,13 @@
 public class Light {
 	private Point position;
 	private Color color;
-	private double SpecularIntensity;
-	private double ShadowIntensity;
-	private double radius;
+	private float SpecularIntensity;
+	private float ShadowIntensity;
+	private float radius;
 
 	
-	public Light(Point position, Color color, double specularIntensity,
-			double shadowIntensity, double radius) {
+	public Light(Point position, Color color, float specularIntensity,
+			float shadowIntensity, float radius) {
 
 		this.position = position;
 		this.color = color;
@@ -38,32 +38,32 @@ public class Light {
 	}
 
 
-	public double getSpecularIntensity() {
+	public float getSpecularIntensity() {
 		return SpecularIntensity;
 	}
 
 
-	public void setSpecularIntensity(double specularIntensity) {
+	public void setSpecularIntensity(float specularIntensity) {
 		SpecularIntensity = specularIntensity;
 	}
 
 
-	public double getShadowIntensity() {
+	public float getShadowIntensity() {
 		return ShadowIntensity;
 	}
 
 
-	public void setShadowIntensity(double shadowIntensity) {
+	public void setShadowIntensity(float shadowIntensity) {
 		ShadowIntensity = shadowIntensity;
 	}
 
 
-	public double getRadius() {
+	public float getRadius() {
 		return radius;
 	}
 
 
-	public void setRadius(double radius) {
+	public void setRadius(float radius) {
 		this.radius = radius;
 	}
 

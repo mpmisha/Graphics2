@@ -21,7 +21,6 @@ public class Camera {
 	
 	public Camera(Point position, Point lookAtPoint, Vector upVector,
 			float screenDistance, float screenWidth) {
-		
 		this.position = position;
 		this.lookAtPoint = lookAtPoint;
 		this.upVector = upVector;
@@ -39,8 +38,7 @@ public class Camera {
 	}
 	public Camera(Point position, Point lookAtPoint, Vector upVector,
 			float screenDistance, float screenWidth, Color backgroundColor,
-			int shadowRays, int recursionLevel) {
-		
+			int shadowRays, int recursionLevel) {	
 		this.position = position;
 		this.lookAtPoint = lookAtPoint;
 		this.upVector = upVector;
@@ -51,6 +49,7 @@ public class Camera {
 		this.shadowRays = shadowRays;
 		this.recursionLevel = recursionLevel;
 		this.angle = (float)Math.atan((0.5f * screenWidth) / screenDistance);
+		
 		calcCameraVectors();
 	}
 	private void calcCameraVectors(){
@@ -136,7 +135,6 @@ public class Camera {
 	public void setRecursionLevel(int recursionLevel) {
 		this.recursionLevel = recursionLevel;
 	}
-	
 	public Ray constructRayFomPixel(float x, float y) { 
 		Vector p,v;
 		

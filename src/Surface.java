@@ -46,6 +46,10 @@ public abstract class Surface {
 	}
 
 	public abstract Intersection findIntersection(Ray ray);
+
+	public Vector getNormal(Point pointOfIntersection) {
+		return pointOfIntersection.Subsract(this.getCenterPoint());
+	}
 	
 	
 }

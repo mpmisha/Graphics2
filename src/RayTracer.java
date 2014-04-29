@@ -27,7 +27,7 @@ import javax.imageio.ImageIO;
  */
 
 public class RayTracer {
-	public static final boolean DEBUG=true;
+	public static final boolean DEBUG=false;
 	public static final Color BGCOLOR=new Color(0, 50, 21);
 	
 	
@@ -244,9 +244,8 @@ public class RayTracer {
 					if (hit==null) {
 						hitColor = camera.getBackgroundColor();
 					}else{
-						hitColor = Color.getColor(hit);	
+						hitColor = Color.getColor(hit,lightList,ray);	
 					}
-					
 					colorVector = hitColor.ReturnColorBytes();
 					rgbData[y*this.imageWidth*3 + x*3 + 0] = (byte) colorVector.getR();
 					rgbData[y*this.imageWidth*3 + x*3 + 1] = (byte) colorVector.getG();

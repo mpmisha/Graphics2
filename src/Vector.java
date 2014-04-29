@@ -110,7 +110,7 @@ public class Vector {
 	public void Normalize() {
 		if(GetMagnitude() == 0)
 			return;
-		Vector temp = this.multiplyByScalar(1 / this.GetMagnitude());
+		Vector temp = this.multiplyByScalar(1 / GetMagnitude());
 		this.setX(temp.getX());
 		this.setY(temp.getY());
 		this.setZ(temp.getZ());
