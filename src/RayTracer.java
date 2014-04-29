@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
 
 public class RayTracer {
 	public static final boolean DEBUG=true;
+	public static final Color BGCOLOR=new Color(0, 50, 21);
 	
 	
 	public int imageWidth;
@@ -237,14 +238,15 @@ public class RayTracer {
 		//Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
 			for (int y = 0; y < this.imageHeight; y++) {
 				for (int x = 0; x < this.imageWidth; x++) {
+					//System.out.print(x+","+y);
 					Ray ray = camera.constructRayFomPixel((float)x,(float)y);
 					Intersection hit = findNearestIntersection(ray);
 					if (hit==null) {
-						hitColor = new Color(255,0,0);
+						hitColor = camera.getBackgroundColor();
 					}else{
 						hitColor = Color.getColor(hit);	
 					}
-					System.out.println(x+","+y);
+					
 					colorVector = hitColor.ReturnColorBytes();
 					rgbData[y*this.imageWidth*3 + x*3] = (byte)   colorVector.getR();
 					rgbData[y*this.imageWidth*3 + x*3+1] = (byte) colorVector.getG();
@@ -279,19 +281,19 @@ public class RayTracer {
 	}
 	
 	public Intersection findNearestIntersection(Ray ray){
-		Intersection minInter;
-		LinkedList<Intersection> intersectionList = new LinkedList<Intersection>();
-		Intersection minSurface = null;
+		Intersection tempInter, minInter=new Intersection(Float.MAX_VALUE, null, null);
+		
 		for (Surface surface :  surfaceList) {
-			intersectionList.add(surface.findIntersection(ray));
-		}
-		minInter=intersectionList.getFirst();
-		for (int i = 1; i < intersectionList.size(); i++) {
-			if (intersectionList.get(i)!=null && intersectionList.get(i).getDistance()<minInter.getDistance()){
-				minInter=intersectionList.get(i);
+			tempInter = surface.findIntersection(ray);
+			if (tempInter!=null){
+				if (tempInter.getDistance()<minInter.getDistance()){
+					minInter=tempInter;
+				}
 			}
 		}
-		return minInter;
+
+		if (minInter.getPointOfIntersection()==null) return null;
+		else return minInter;
 	}
 
 

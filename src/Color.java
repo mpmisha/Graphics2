@@ -42,7 +42,7 @@ public class Color {
 		return new Color((float)Math.floor(this.R * 255), (float)Math.floor(this.G * 255), (float)Math.floor(this.B * 255));
 	}
 	
-	public static Color getColor(Intersection hit){
+	public static Color getColor(Intersection hit){//TODO:write areal function;
 		// a temporary imp of calculating the color.
 		return hit.surface.getMaterial().getSpecularColor();
 		

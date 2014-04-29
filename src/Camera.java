@@ -54,19 +54,21 @@ public class Camera {
 		calcCameraVectors();
 	}
 	private void calcCameraVectors(){
+		Vector tempUp,tempRight,positionVector;
+		
 		this.towards = new Vector(this.lookAtPoint).vectorSubsract(new Vector(this.position));
 		this.towards.Normalize();
 		
-		Vector tempUp = this.upVector.crossProd(towards);
+		tempUp = this.upVector.crossProd(towards);
 		tempUp.Normalize();
 		
-		Vector tempRight = tempUp.crossProd(towards);
+		tempRight = tempUp.crossProd(towards);
 		tempRight.Normalize();
 		
 		this.upVector=tempRight;
 		this.right=tempUp;
 		
-		Vector positionVector = new Vector(position);
+		positionVector = new Vector(position);
 		
 		P1 = positionVector.vectorAdd(towards.multiplyByScalar(screenDistance));
 		P1 = P1.vectorSubsract(right.multiplyByScalar(screenDistance*((float)Math.tan(angle))));
@@ -116,7 +118,6 @@ public class Camera {
 	public void setScreenHeight(float screenHeight) {
 		this.screenHeight = screenHeight;
 	}
-	
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
@@ -135,31 +136,21 @@ public class Camera {
 	public void setRecursionLevel(int recursionLevel) {
 		this.recursionLevel = recursionLevel;
 	}
-	/*
-	 * by default camera position is set to be the (0,0,0) of the whole "world"
-	 * so we want to cast a ray from the eye to the position x,y of the window
-	 * which is defined by:
-	 * the distance from the camera eye
-	 * the width 
-	 * lookAt point
-	 * and up vector
-	 * 
-	 * */
-	public Ray constructRayFomPixel(float x, float y) { //TODO: Michael Need to Complete according to Barak's code
+	
+	public Ray constructRayFomPixel(float x, float y) { 
+		Vector p,v;
 		
-		float rightCoeff = (float)(((float)(x+0.5f) / (float)this.imageWidth) * 2 * screenDistance * (float)Math.tan(angle));
-		float upCoeff = (float)(((float)(y+0.5f) / (float)this.imageWidth) * 2 * screenDistance * (float)Math.tan(angle));
+		float horizontalFactor = (float)(((float)(x+0.5f) / (float)this.imageWidth) * 2 * screenDistance * (float)Math.tan(angle));
+		//align ray horizontally
+		p  = P1.vectorAdd(right.multiplyByScalar(horizontalFactor));
 		
-		Vector p  = P1.vectorAdd(right.multiplyByScalar(rightCoeff));
-		p=this.P1.vectorAdd(upVector.multiplyByScalar(upCoeff));
+		float verticalFactor = (float)(((float)(y+0.5f) / (float)this.imageWidth) * 2 * screenDistance * (float)Math.tan(angle));
+		//align ray vertically
+		p=p.vectorAdd(upVector.multiplyByScalar(verticalFactor));
 		
-//		Vector p  = this.P1.vectorAdd(upVector.multiplyByScalar(upCoeff));
-//		p=this.P1.vectorAdd(right.multiplyByScalar(rightCoeff));
-		
-		
-		
-		Vector v = p.vectorSubsract(new Vector(position));
+		v = p.vectorSubsract(new Vector(position));
 		v.Normalize();
-		return new Ray(position, v, p);  //TODO:until here all is good!
+			
+		return new Ray(position, v, p);  
 	}
 }
