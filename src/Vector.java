@@ -1,33 +1,33 @@
 public class Vector {
 
-	private double x,y,z;
-	private double length;
+	private float x,y,z;
+	private float length;
 	
-	public Vector(double x, double y, double z) {
+	public Vector(float x, float y, float z) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.length = Math.sqrt(x*x + y*y + z*z);
+		this.length =(float) Math.sqrt(x*x + y*y + z*z);
 	}
 	
 	public Vector(){
-		this(0.0,0.0,0.0);
-		this.length = Math.sqrt(x*x + y*y + z*z);
+		this(0.0f,0.0f,0.0f);
+		this.length = (float)Math.sqrt(x*x + y*y + z*z);
 	}
 	
 	public Vector(Point dest, Point origin) {
     	x = dest.getX() - origin.getX();
     	y = dest.getY() - origin.getY();
     	z = dest.getZ() - origin.getZ();
-    	this.length = Math.sqrt(x*x + y*y + z*z);
+    	this.length =(float) Math.sqrt(x*x + y*y + z*z);
     }
 	
 	public Vector(Point dest, Vector direction) {
     	x = dest.getX() - direction.getX();
     	y = dest.getY() - direction.getY();
     	z = dest.getZ() - direction.getZ();
-    	this.length = Math.sqrt(x*x + y*y + z*z);
+    	this.length =(float) Math.sqrt(x*x + y*y + z*z);
     }
 	
 	
@@ -41,53 +41,66 @@ public class Vector {
 		this.x = other.x;
 		this.y = other.y;
 		this.z = other.z;
-		this.length = Math.sqrt(x*x + y*y + z*z);
+		this.length =(float) Math.sqrt(x*x + y*y + z*z);
 	}
 	
 	
-	public void multiplyByScalar(double scalar){
-		this.x*=scalar;
-		this.y*=scalar;
-		this.z*=scalar;
+	public Vector multiplyByScalar(float scalar){
+		return (new Vector(this.getX()*scalar,this.getY()*scalar,this.getZ()*scalar));
+	}
+	
+	public Vector vectorSubsract(Vector b){
+		return new Vector(this.getX()-b.getX(),this.getY()-b.getY(),this.getZ()-b.getZ());	
+	}
+	public Vector vectorAdd(Vector b){
+		return new Vector(this.getX()+b.getX(),this.getY()+b.getY(),this.getZ()+b.getZ());	
+	}
+	
+	public float dotProdcut(Vector other) {
+		return (this.x * other.getX() + this.y * other.getY() + this.z * other.getZ());
 	}
 
-	public double dotProdcut(Vector other) {
-		return x * other.x + y * other.y + z * other.z;
+	public Vector crossProd(Vector other) {	
+		return new Vector(
+                this.y * other.z - this.z * other.y,
+                this.z * other.x - this.x * other.z,
+                this.x * other.y - this.y * other.x);
 	}
 	
-	public double getX() {
+	
+	public float getX() {
 		return x;
 	}
 
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public double getZ() {
+	public float getZ() {
 		return z;
 	}
 
-	public void setZ(double z) {
+	public void setZ(float z) {
 		this.z = z;
 	}
 
-	public double getLength() {
+	public float getLength() {
 		return length;
 	}
 
-	public void setLength(double length) {
+	public void setLength(float length) {
 		this.length = length;
 	}
 	
-	public void scale(double d){		
+	public void scale(float d){		
 		this.x *= d;
 		this.y *= d;
 		this.z *= d;
@@ -104,10 +117,19 @@ public class Vector {
 		this.z *=p.getZ();		
 	}
 	
-	public Vector crossProd(Vector other) {	
-		return new Vector(
-                this.y * other.z - this.z * other.y,
-                this.z * other.x - this.x * other.z,
-                this.x * other.y - this.y * other.x);
+
+	public float GetMagnitude() {
+		return (float) Math.sqrt(x*x + y*y + z*z);
+	}
+	
+	public void Normalize() {
+		if(GetMagnitude() == 0)
+			return;
+		this.setX(this.getX()*(1/GetMagnitude()));
+		this.setY(this.getY()*(1/GetMagnitude()));
+		this.setZ(this.getZ()*(1/GetMagnitude()));
+		
+		
+//		this.multiplyByScalar(1/GetMagnitude());
 	}
 }

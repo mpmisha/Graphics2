@@ -1,19 +1,19 @@
 
 public class Sphere extends Surface {
-	private double radius;
+	private float radius;
 
 	
 	public Sphere(Material material, Point centerPoint, int mat_idx,
-			double radius) {
+			float radius) {
 		super(material, centerPoint, mat_idx);
 		this.radius = radius;
 	}
 
-	public double getRadius() {
+	public float getRadius() {
 		return radius;
 	}
 
-	public void setRadius(double radius) {
+	public void setRadius(float radius) {
 		this.radius = radius;
 	}
 
@@ -23,65 +23,69 @@ public class Sphere extends Surface {
 	}
 
 	@Override
-	public Intersection nearestIntersection(Ray ray) {
-		double b;
-		double c;
-		double disc, solution;
-		double t1, t2;
+	public Intersection findIntersection(Ray ray) {
+		float t_ca,squred_d,squred_r,t_hc,t1,t2;
+		Vector v,L,p1,p2;
+		Intersection inter;
+		Point P0;
 		
-		Vector distance = new Vector(ray.getOrigin(), this.getCenterPoint());
+		P0 = ray.getOrigin();
+		v = ray.getDiraction();
+		v.Normalize();
 		
-		Vector distanceSquared = new Vector(distance);
-		distanceSquared.multiplyByScalar(2);
-		b = distanceSquared.dotProdcut(ray.getDiraction());
-		c = distance.getLength() - Math.pow(radius, 2);
-
-		disc = b * b - 4 * c;
-	
-		if (disc < 0) {
-			return null;
+		L = new Vector(this.getCenterPoint()).vectorSubsract(new Vector(P0));
+		
+		t_ca = L.dotProdcut(v);
+		if(t_ca<0) return null;
+		
+		squred_d = L.dotProdcut(L) - ((float)Math.pow(t_ca, 2));
+		squred_r=(float)Math.pow(this.getRadius(), 2);
+		if(squred_d>squred_r) return null;
+		
+		t_hc=(float)Math.sqrt(squred_r-squred_d);
+		t1 = t_ca-t_hc;
+		t2 = t_ca+t_hc;
+		
+		p1=new Vector(P0).vectorSubsract(v.multiplyByScalar(t1));
+		p2=new Vector(P0).vectorSubsract(v.multiplyByScalar(t2));
+		
+		p1=new Vector(ray.getOrigin()).vectorSubsract(p1);
+		p2=new Vector(ray.getOrigin()).vectorSubsract(p2);
+		
+		if (p1.GetMagnitude()<=p2.GetMagnitude()){ 
+			inter = new Intersection(t1, new Point(p1), this);
+		}else{
+			inter = new Intersection(t2, new Point(p2), this);
 		}
 		
-		if (b < 0) {
-			solution = (-b - Math.sqrt(disc)) / 2;
-		} else {
-			solution = (-b + Math.sqrt(disc)) / 2;
-		}
-	
-		t1 = solution;
-		t2 = c / solution;
-
-		if (t1 < t2) {
-			if (t2 < 0) {
-				return null;
-			}
-
-			if (t1 < 0) {
-				Point intersection = new Point(ray.getOrigin());
-				intersection.mac(t2, ray.getDiraction());
-				return new Intersection(t2, intersection, this);
-			}
-
-			Point intersection = new Point(ray.getOrigin());
-			intersection.mac(t1, ray.getDiraction());
-			return new Intersection(t1, intersection, this);
-			
-		} else {
-			if (t1 < 0) {
-				return null;
-			}
-
-			if (t2 < 0) {
-				Point intersection = new Point(ray.getOrigin());
-				intersection.mac(t1, ray.getDiraction());
-				return new Intersection(t1, intersection, this);
-			}
-
-			Point intersection = new Point(ray.getOrigin());
-			intersection.mac(t2, ray.getDiraction());
-			return new Intersection(t2, intersection, this);
-
-		}
+		return inter;
+		
+//		float b,c,squred_d,squred_r;
+//		
+//		float disc, solution;
+//		float t1, t2,t_ca,t_hc, t, t_min;
+//		
+//		Vector distance = new Vector(ray.getOrigin(), this.getCenterPoint());
+//		t_ca = distance.dotProdcut(ray.getDiraction());
+//		
+//		if(t_ca<0) return null;
+//		
+//		squred_d = distance.dotProdcut(distance)-t_ca*t_ca;
+//		squred_r= this.getRadius()*this.getRadius();
+//		if(squred_d>squred_r) return null;
+//		
+//		t_hc= Math.sqrt(squred_r-squred_d);	
+//		t1 = t_ca - t_hc;
+//		t2 = t_ca + t_hc;
+//		
+//		t_min = Math.min(t1, t2);
+//		
+//		Point intersection = new Point(ray.getOrigin());
+//		intersection.mac(t_min, ray.getDiraction());
+//		return new Intersection(t_min, intersection, this);
+		
+		
+		
 	}
 	
 	

@@ -44,7 +44,7 @@ public class Color {
 	
 	public static Color getColor(Intersection hit){
 		// a temporary imp of calculating the color.
-		return hit.surface.getMaterial().getDiffuseColor();
+		return hit.surface.getMaterial().getSpecularColor();
 		
 	}
 	

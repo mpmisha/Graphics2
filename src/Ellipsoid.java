@@ -17,8 +17,9 @@ public class Ellipsoid extends Surface{
 	}
 
 	@Override
-	public Intersection nearestIntersection(Ray ray) {
-		// TODO Auto-generated method stub
+	public Intersection findIntersection(Ray ray) {
+		
+		
 		return null;
 	}
 	
