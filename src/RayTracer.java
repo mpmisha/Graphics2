@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 
 
+import java.util.LinkedList;
+
 import javax.imageio.ImageIO;
 
 
@@ -26,6 +28,7 @@ import javax.imageio.ImageIO;
 
 public class RayTracer {
 	public static final boolean DEBUG=true;
+	public static final Color BGCOLOR=new Color(0, 50, 21);
 	
 	
 	public int imageWidth;
@@ -86,10 +89,10 @@ public class RayTracer {
 	public void parseScene(String sceneFileName) throws IOException, RayTracerException
 	{
 		FileReader fr = new FileReader(sceneFileName);
-
+		
 		BufferedReader r = new BufferedReader(fr);
 		String line = null;
-		int lineNum = 0;
+		int lineNum = 0,surfaceCount=0;
 		System.out.println("Started parsing scene file " + sceneFileName);
 		surfaceList= new ArrayList<Surface>();
 		materialList= new ArrayList<Material>();
@@ -112,11 +115,11 @@ public class RayTracer {
 
 				if (code.equals("cam"))
 				{
-					Point positionPoint = new Point(Double.parseDouble(params[0]),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
-					Point lookAtPoint = new Point(Double.parseDouble(params[3]),Double.parseDouble(params[4]),Double.parseDouble(params[5]));
-					Vector upVector = new Vector(Double.parseDouble(params[6]),Double.parseDouble(params[7]),Double.parseDouble(params[8]));
-					double screenDist = Double.parseDouble(params[9]);
-					double screenWidth = Double.parseDouble(params[10]);
+					Point positionPoint = new Point(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
+					Point lookAtPoint = new Point(Float.parseFloat(params[3]),Float.parseFloat(params[4]),Float.parseFloat(params[5]));
+					Vector upVector = new Vector(Float.parseFloat(params[6]),Float.parseFloat(params[7]),Float.parseFloat(params[8]));
+					float screenDist = Float.parseFloat(params[9]);
+					float screenWidth = Float.parseFloat(params[10]);
 					
 					camera = new Camera(positionPoint,lookAtPoint,upVector,screenDist,screenWidth);
 					
@@ -127,7 +130,7 @@ public class RayTracer {
 				else if (code.equals("set"))
 				{
                                         // Add code here to parse general settings parameters
-					Color bgColor = new Color(Double.parseDouble(params[0]),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
+					Color bgColor = new Color(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
 					int shadowRays = Integer.parseInt(params[3]);
 					int recLevel = Integer.parseInt(params[4]);
 					camera.setBackgroundColor(bgColor);
@@ -139,11 +142,11 @@ public class RayTracer {
 				else if (code.equals("mtl"))
 				{
 					
-					Color diffuseColor = new Color(Double.parseDouble(params[0]),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
-					Color specularColor = new Color(Double.parseDouble(params[3]),Double.parseDouble(params[4]),Double.parseDouble(params[5]));
-					Color refColor = new Color(Double.parseDouble(params[6]),Double.parseDouble(params[7]),Double.parseDouble(params[8]));
-					double phongCoeffticient = Double.parseDouble(params[9]);
-					double trans = Double.parseDouble(params[10]);
+					Color diffuseColor = new Color(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
+					Color specularColor = new Color(Float.parseFloat(params[3]),Float.parseFloat(params[4]),Float.parseFloat(params[5]));
+					Color refColor = new Color(Float.parseFloat(params[6]),Float.parseFloat(params[7]),Float.parseFloat(params[8]));
+					float phongCoeffticient = Float.parseFloat(params[9]);
+					float trans = Float.parseFloat(params[10]);
 					
 					Material material = new Material(diffuseColor,specularColor,phongCoeffticient,refColor,trans);
 					materialList.add(material);
@@ -154,11 +157,12 @@ public class RayTracer {
 				else if (code.equals("sph"))
 				{
 					
-					Point centerPoint = new Point(Double.parseDouble(params[0]),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
-					double radius = Double.parseDouble(params[3]);
+					Point centerPoint = new Point(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
+					float radius = Float.parseFloat(params[3]);
 					int mat_idx = Integer.parseInt(params[4]);
 					//new sphere - add material info later (maybe!)
 					Sphere sphere = new Sphere(null, centerPoint, mat_idx, radius);
+					sphere.setId(surfaceCount++);
 					
 					surfaceList.add(sphere);
 					if (DEBUG) System.out.println(sphere.toString());
@@ -166,11 +170,12 @@ public class RayTracer {
 				}
 				else if (code.equals("pln"))
 				{
-					Point centerPoint = new Point(Double.parseDouble(params[0]),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
+					Point centerPoint = new Point(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
 					int offset = Integer.parseInt(params[3]);
 					int mat_idx = Integer.parseInt(params[4]);
 					//new plane - add material info later
 					Plane plane = new Plane(null, centerPoint, mat_idx, offset);
+					plane.setId(surfaceCount++);
 					surfaceList.add(plane);
                                         
 					if (DEBUG) System.out.println(plane.toString());
@@ -186,11 +191,11 @@ public class RayTracer {
 				}
 				else if (code.equals("lgt"))
 				{
-					Point position = new Point(Double.parseDouble(params[0]),Double.parseDouble(params[1]),Double.parseDouble(params[2]));
-					Color color =new Color(Double.parseDouble(params[3]),Double.parseDouble(params[4]),Double.parseDouble(params[5]));
-					double specularIntensity = Double.parseDouble(params[6]);
-					double shadowIntensity = Double.parseDouble(params[7]);
-					double radius = Double.parseDouble(params[8]);
+					Point position = new Point(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
+					Color color =new Color(Float.parseFloat(params[3]),Float.parseFloat(params[4]),Float.parseFloat(params[5]));
+					float specularIntensity = Float.parseFloat(params[6]);
+					float shadowIntensity = Float.parseFloat(params[7]);
+					float radius = Float.parseFloat(params[8]);
 					
 					Light light = new Light(position, color, specularIntensity, shadowIntensity, radius);
 					
@@ -214,7 +219,7 @@ public class RayTracer {
 		
 		//merge each surface with its material
 		for (int i = 0; i < surfaceList.size(); i++) {
-			surfaceList.get(i).setMaterial(materialList.get(i));
+			surfaceList.get(i).setMaterial(materialList.get(surfaceList.get(i).getMat_idx()-1));
 		}
 		
 		System.out.println("Finished parsing scene file " + sceneFileName);
@@ -233,22 +238,19 @@ public class RayTracer {
 		//Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
 			for (int y = 0; y < this.imageHeight; y++) {
 				for (int x = 0; x < this.imageWidth; x++) {
-					Ray ray = camera.constructRayFomPixel((double)x,(double)y);
-					Intersection hit = findIntersection(ray);
+					//System.out.print(x+","+y);
+					Ray ray = camera.constructRayFomPixel((float)x,(float)y);
+					Intersection hit = findNearestIntersection(ray);
 					if (hit==null) {
-						hitColor = new Color(255,0,0);
+						hitColor = camera.getBackgroundColor();
 					}else{
 						hitColor = Color.getColor(hit);	
 					}
 					
-					if (DEBUG && x==11 && y==19){
-						System.out.println("debug");
-					}
 					colorVector = hitColor.ReturnColorBytes();
-					
-					rgbData[y*this.imageWidth*3 + x*3] = (byte)   colorVector.getR();
-					rgbData[y*this.imageWidth*3 + x*3+1] = (byte) colorVector.getG();
-					rgbData[y*this.imageWidth*3 + x*3+2] = (byte) colorVector.getB();
+					rgbData[y*this.imageWidth*3 + x*3 + 0] = (byte) colorVector.getR();
+					rgbData[y*this.imageWidth*3 + x*3 + 1] = (byte) colorVector.getG();
+					rgbData[y*this.imageWidth*3 + x*3 + 2] = (byte) colorVector.getB();
 				}
 			}
 		
@@ -278,23 +280,20 @@ public class RayTracer {
 
 	}
 	
-	public Intersection findIntersection(Ray ray){
-		double minD = Double.POSITIVE_INFINITY;
-		Intersection minSurface = null;
+	public Intersection findNearestIntersection(Ray ray){
+		Intersection tempInter, minInter=new Intersection(Float.MAX_VALUE, null, null);
+		
 		for (Surface surface :  surfaceList) {
-			Intersection hit = surface.nearestIntersection(ray);
-			if (hit != null) {
-				double d = hit.distance;
-				if (minD > d) {
-					minD = d;
-					minSurface = hit;
+			tempInter = surface.findIntersection(ray);
+			if (tempInter!=null){
+				if (tempInter.getDistance()<minInter.getDistance()){
+					minInter=tempInter;
 				}
 			}
 		}
 
-		if (Double.isInfinite(minD))
-			return null;
-		return minSurface;
+		if (minInter.getPointOfIntersection()==null) return null;
+		else return minInter;
 	}
 
 

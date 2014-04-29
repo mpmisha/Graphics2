@@ -3,12 +3,22 @@ public abstract class Surface {
 	private Material material;
 	private Point centerPoint;
 	private int mat_idx;
+	private int id;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Surface(Material material, Point centerPoint, int mat_idx) {
 
 		this.material = material;
 		this.centerPoint = centerPoint;
 		this.mat_idx = mat_idx;
+	
 	}
 
 	public Material getMaterial() {
@@ -35,7 +45,7 @@ public abstract class Surface {
 		this.mat_idx = mat_idx;
 	}
 
-	public abstract Intersection nearestIntersection(Ray ray);
+	public abstract Intersection findIntersection(Ray ray);
 	
 	
 }

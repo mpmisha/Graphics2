@@ -8,17 +8,19 @@ import java.awt.Image;
 public class Camera {
 	private Point position;
 	private Point lookAtPoint;
-	private Vector upVector; 
-	private double screenDistance;
-	private double screenWidth;
-	private double screenHeight;
+	private Vector upVector,towards,right; 
+	private float screenDistance;
+	private float screenWidth;
+	private float screenHeight;
 	private Color backgroundColor;
 	private int shadowRays;
 	private int recursionLevel;
-	private double angle;
+	private float angle;
+	private Vector P1;
+	private int imageWidth;
 	
 	public Camera(Point position, Point lookAtPoint, Vector upVector,
-			double screenDistance, double screenWidth) {
+			float screenDistance, float screenWidth) {
 		
 		this.position = position;
 		this.lookAtPoint = lookAtPoint;
@@ -29,12 +31,14 @@ public class Camera {
 		this.backgroundColor = null;
 		this.shadowRays = 0;
 		this.recursionLevel = 0;
+		this.imageWidth=500;
 		this.angle = (float)Math.atan((0.5f * screenWidth) / screenDistance);
 		
+		calcCameraVectors();
 		
 	}
 	public Camera(Point position, Point lookAtPoint, Vector upVector,
-			double screenDistance, double screenWidth, Color backgroundColor,
+			float screenDistance, float screenWidth, Color backgroundColor,
 			int shadowRays, int recursionLevel) {
 		
 		this.position = position;
@@ -47,6 +51,28 @@ public class Camera {
 		this.shadowRays = shadowRays;
 		this.recursionLevel = recursionLevel;
 		this.angle = (float)Math.atan((0.5f * screenWidth) / screenDistance);
+		calcCameraVectors();
+	}
+	private void calcCameraVectors(){
+		Vector tempUp,tempRight,positionVector;
+		
+		this.towards = new Vector(this.lookAtPoint).vectorSubsract(new Vector(this.position));
+		this.towards.Normalize();
+		
+		tempRight = this.upVector.crossProd(towards);
+		tempRight.Normalize();
+		
+		tempUp = tempRight.crossProd(towards);
+		tempUp.Normalize();
+		
+		this.upVector=tempUp;
+		this.right=tempRight;
+		
+		positionVector = new Vector(position);
+		
+		P1 = positionVector.vectorAdd(towards.multiplyByScalar(screenDistance));
+		P1 = P1.vectorSubsract(right.multiplyByScalar(screenDistance*((float)Math.tan(angle))));
+		P1 = P1.vectorSubsract(upVector.multiplyByScalar(screenDistance*((float)Math.tan(angle))));
 	}
 	public Point getPosition() {
 		return position;
@@ -74,25 +100,24 @@ public class Camera {
 	public void setUpVector(Vector upVector) {
 		this.upVector = upVector;
 	}
-	public double getScreenDistance() {
+	public float getScreenDistance() {
 		return screenDistance;
 	}
-	public void setScreenDistance(double screenDistance) {
+	public void setScreenDistance(float screenDistance) {
 		this.screenDistance = screenDistance;
 	}
-	public double getScreenWidth() {
+	public float getScreenWidth() {
 		return screenWidth;
 	}
-	public void setScreenWidth(double screenWidth) {
+	public void setScreenWidth(float screenWidth) {
 		this.screenWidth = screenWidth;
 	}
-	public double getScreenHeight() {
+	public float getScreenHeight() {
 		return screenHeight;
 	}
-	public void setScreenHeight(double screenHeight) {
+	public void setScreenHeight(float screenHeight) {
 		this.screenHeight = screenHeight;
 	}
-	
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
@@ -111,59 +136,21 @@ public class Camera {
 	public void setRecursionLevel(int recursionLevel) {
 		this.recursionLevel = recursionLevel;
 	}
-	/*
-	 * by default camera position is set to be the (0,0,0) of the whole "world"
-	 * so we want to cast a ray from the eye to the position x,y of the window
-	 * which is defined by:
-	 * the distance from the camera eye
-	 * the width 
-	 * lookAt point
-	 * and up vector
-	 * 
-	 * */
-	public Ray constructRayFomPixel(double x, double y) { //TODO: Michael Need to Complete according to Barak's code
-		
-		
-		float rightCoeff = (float)(((float)(x+0.5f) / 1) * 2 * screenDistance * (float)Math.tan(angle));
-		float upCoeff = (float)(((float)(y+0.5f) / 1) * 2 * screenDistance * (float)Math.tan(angle));
 	
-		Vector P1 = new Vector();
-		Vector P = Math3D.VectorAddition(P1, Math3D.MultiplyScalar(right, rightCoeff));
-		P = Math3D.VectorAddition(P, Math3D.MultiplyScalar(up, upCoeff));
+	public Ray constructRayFomPixel(float x, float y) { 
+		Vector p,v;
 		
-		Vector V = Math3D.VectorSubstraction(P, position);
-		V.Normalize();
+		float horizontalFactor = (float)(((float)(x+0.5f) / (float)this.imageWidth) * 2 * screenDistance * (float)Math.tan(angle));
+		//align ray horizontally
+		p  = P1.vectorAdd(right.multiplyByScalar(horizontalFactor));
 		
-		return new Ray(position, V, P);
+		float verticalFactor = (float)(((float)(y+0.5f) / (float)this.imageWidth) * 2 * screenDistance * (float)Math.tan(angle));
+		//align ray vertically
+		p=p.vectorAdd(upVector.multiplyByScalar(verticalFactor));
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		Point P0 = this.position;
-//		Vector towards = new Vector(this.lookAtPoint);
-//		Vector up = this.upVector;
-//		Vector right = towards.crossProd(up);
-//		
-//		towards.scale(this.screenDistance); 		
-//		right.scale(x-(double) this.screenWidth/2);	
-//		up.scale(y-(double) this.screenHeight/2);		
-//		
-//		lookAtPoint.add(towards);	//move to screen
-//		lookAtPoint.add(up);		//move up
-//		lookAtPoint.add(right);		//move right
-//		
-//									//now were at the x,y point on the screen
-//		Vector rayVector = new Vector(lookAtPoint,P0); 
-//		return new Ray(P0,rayVector);
+		v = p.vectorSubsract(new Vector(position));
+		v.Normalize();
+			
+		return new Ray(position, v, p);  
 	}
 }

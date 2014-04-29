@@ -1,24 +1,31 @@
 
 
 public class Point {
-	private double x;
-	private double y;
-	private double z;
+	private float x;
+	private float y;
+	private float z;
 	
-	public Point(double x, double y, double z){
+	public Point(float x, float y, float z){
 		this.x=x;
 		this.y=y;
 		this.z=z;
 	}
 	
 	public Point(Point other){
-		this.x = other.x;
-		this.y = other.y;
-		this.z = other.z;
+		this.x = other.getX();
+		this.y = other.getY();
+		this.z = other.getZ();
+	}
+	
+	public Point(Vector other){
+		this.x = other.getX();
+		this.y = other.getY();
+		this.z = other.getZ();
 	}
 	
 	
-	public void mac(double s, Vector a) {
+	
+	public void mac(float s, Vector a) {
 		x += s * a.getX();
         y += s * a.getY();
         z += s * a.getZ();
@@ -33,27 +40,27 @@ public class Point {
 
 	
 	
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public double getZ() {
+	public float getZ() {
 		return z;
 	}
 
-	public void setZ(double z) {
+	public void setZ(float z) {
 		this.z = z;
 	}
 
@@ -68,7 +75,7 @@ public class Point {
 		this.y +=p.getY();
 		this.z +=p.getZ();
 	}
-	public void add(double d){
+	public void add(float d){
 		this.x +=d;
 		this.y +=d;
 		this.z +=d;
