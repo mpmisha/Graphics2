@@ -59,14 +59,14 @@ public class Camera {
 		this.towards = new Vector(this.lookAtPoint).vectorSubsract(new Vector(this.position));
 		this.towards.Normalize();
 		
-		tempUp = this.upVector.crossProd(towards);
-		tempUp.Normalize();
-		
-		tempRight = tempUp.crossProd(towards);
+		tempRight = this.upVector.crossProd(towards);
 		tempRight.Normalize();
 		
-		this.upVector=tempRight;
-		this.right=tempUp;
+		tempUp = tempRight.crossProd(towards);
+		tempUp.Normalize();
+		
+		this.upVector=tempUp;
+		this.right=tempRight;
 		
 		positionVector = new Vector(position);
 		

@@ -248,9 +248,9 @@ public class RayTracer {
 					}
 					
 					colorVector = hitColor.ReturnColorBytes();
-					rgbData[y*this.imageWidth*3 + x*3] = (byte)   colorVector.getR();
-					rgbData[y*this.imageWidth*3 + x*3+1] = (byte) colorVector.getG();
-					rgbData[y*this.imageWidth*3 + x*3+2] = (byte) colorVector.getB();
+					rgbData[y*this.imageWidth*3 + x*3 + 0] = (byte) colorVector.getR();
+					rgbData[y*this.imageWidth*3 + x*3 + 1] = (byte) colorVector.getG();
+					rgbData[y*this.imageWidth*3 + x*3 + 2] = (byte) colorVector.getB();
 				}
 			}
 		

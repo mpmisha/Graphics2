@@ -38,21 +38,21 @@ public class Sphere extends Surface {
 		t_ca = L.dotProdcut(v);
 		if(t_ca<0) return null;
 		
-		squred_d = L.dotProdcut(L) - ((float)Math.pow(t_ca, 2));
-		squred_r=(float)Math.pow(this.getRadius(), 2);
+		squred_d = L.dotProdcut(L) - (t_ca*t_ca);
+		squred_r=this.getRadius()*this.getRadius();
 		if(squred_d>squred_r) return null;
 		
 		t_hc=(float)Math.sqrt(squred_r-squred_d);
 		t1 = t_ca-t_hc;
 		t2 = t_ca+t_hc;
 		
-		p1=new Vector(P0).vectorSubsract(v.multiplyByScalar(t1));
-		p2=new Vector(P0).vectorSubsract(v.multiplyByScalar(t2));
+		p1=new Vector(P0).vectorAdd(v.multiplyByScalar(t1));
+		p2=new Vector(P0).vectorAdd(v.multiplyByScalar(t2));
 		
-		p1=new Vector(ray.getOrigin()).vectorSubsract(p1);
-		p2=new Vector(ray.getOrigin()).vectorSubsract(p2);
+		Vector temp_p1=new Vector(ray.getOrigin()).vectorSubsract(p1);
+		Vector temp_p2=new Vector(ray.getOrigin()).vectorSubsract(p2);
 		
-		if (p1.GetMagnitude()<=p2.GetMagnitude()){ 
+		if (temp_p1.GetMagnitude()<=temp_p2.GetMagnitude()){ 
 			inter = new Intersection(t1, new Point(p1), this);
 		}else{
 			inter = new Intersection(t2, new Point(p2), this);

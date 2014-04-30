@@ -30,7 +30,6 @@ public class Vector {
     	this.length =(float) Math.sqrt(x*x + y*y + z*z);
     }
 	
-	
 	public Vector(Point p){
 		x =p.getX();
 		y= p.getY();
@@ -49,11 +48,11 @@ public class Vector {
 		return (new Vector(this.getX()*scalar,this.getY()*scalar,this.getZ()*scalar));
 	}
 	
-	public Vector vectorSubsract(Vector b){
-		return new Vector(this.getX()-b.getX(),this.getY()-b.getY(),this.getZ()-b.getZ());	
+	public Vector vectorSubsract(Vector other){
+		return new Vector(this.getX()-other.getX(),this.getY()-other.getY(),this.getZ()-other.getZ());	
 	}
-	public Vector vectorAdd(Vector b){
-		return new Vector(this.getX()+b.getX(),this.getY()+b.getY(),this.getZ()+b.getZ());	
+	public Vector vectorAdd(Vector other){
+		return new Vector(this.getX()+other.getX(),this.getY()+other.getY(),this.getZ()+other.getZ());	
 	}
 	
 	public float dotProdcut(Vector other) {
@@ -66,46 +65,35 @@ public class Vector {
                 this.z * other.x - this.x * other.z,
                 this.x * other.y - this.y * other.x);
 	}
-	
-	
 	public float getX() {
 		return x;
 	}
-
 	public void setX(float x) {
 		this.x = x;
 	}
-
 	public float getY() {
 		return y;
 	}
-
 	public void setY(float y) {
 		this.y = y;
 	}
-
 	public float getZ() {
 		return z;
 	}
-
 	public void setZ(float z) {
 		this.z = z;
 	}
-
 	public float getLength() {
 		return length;
 	}
-
 	public void setLength(float length) {
 		this.length = length;
 	}
-	
 	public void scale(float d){		
 		this.x *= d;
 		this.y *= d;
 		this.z *= d;
-	}
-	
+	}	
 	public void scale(Vector v){
 		this.x *=v.getX();
 		this.y *=v.getY();
@@ -116,20 +104,14 @@ public class Vector {
 		this.y *=p.getY();
 		this.z *=p.getZ();		
 	}
-	
-
 	public float GetMagnitude() {
 		return (float) Math.sqrt(x*x + y*y + z*z);
 	}
-	
 	public void Normalize() {
 		if(GetMagnitude() == 0)
 			return;
 		this.setX(this.getX()*(1/GetMagnitude()));
 		this.setY(this.getY()*(1/GetMagnitude()));
 		this.setZ(this.getZ()*(1/GetMagnitude()));
-		
-		
-//		this.multiplyByScalar(1/GetMagnitude());
 	}
 }
