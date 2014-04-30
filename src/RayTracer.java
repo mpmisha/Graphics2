@@ -27,7 +27,7 @@ import javax.imageio.ImageIO;
  */
 
 public class RayTracer {
-	public static final boolean DEBUG=true;
+	public static final boolean DEBUG=false;
 	public static final Color BGCOLOR=new Color(0, 50, 21);
 	
 	
