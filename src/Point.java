@@ -86,6 +86,10 @@ public class Point {
 	public String toString() {
 		return "Point [" + x + "," + y + "," + z + "]";
 	}
+
+	public Vector Subsract(Point other) {
+		return new Vector(this.getX()-other.getX(),this.getY()-other.getY(),this.getZ()-other.getZ());
+	}
 	
 	
 	

@@ -3,12 +3,12 @@ public class Material {
 	
 	private Color DiffuseColor;
 	private Color SpecularColor;
-	private double PhongCoeffticient;
+	private float PhongCoeffticient;
 	private Color ReflectionColor;
-	private double Transparency;
+	private float Transparency;
 	
 	public Material(Color diffuseColor, Color specularColor,
-			double phongCoeffticient, Color reflectionColor, double transparency) {
+			float phongCoeffticient, Color reflectionColor, float transparency) {
 		DiffuseColor = diffuseColor;
 		SpecularColor = specularColor;
 		PhongCoeffticient = phongCoeffticient;
@@ -17,7 +17,7 @@ public class Material {
 	}
 	//constructor for first part
 	public Material(Color diffuseColor, Color specularColor,
-			double phongCoeffticient) {
+			float phongCoeffticient) {
 		this(diffuseColor,specularColor,phongCoeffticient,null,0);
 		
 	}
@@ -33,10 +33,10 @@ public class Material {
 	public void setSpecularColor(Color specularColor) {
 		SpecularColor = specularColor;
 	}
-	public double getPhongCoeffticient() {
+	public float getPhongCoeffticient() {
 		return PhongCoeffticient;
 	}
-	public void setPhongCoeffticient(double phongCoeffticient) {
+	public void setPhongCoeffticient(float phongCoeffticient) {
 		PhongCoeffticient = phongCoeffticient;
 	}
 	public Color getReflectionColor() {
@@ -45,10 +45,10 @@ public class Material {
 	public void setReflectionColor(Color reflectionColor) {
 		ReflectionColor = reflectionColor;
 	}
-	public double getTransparency() {
+	public float getTransparency() {
 		return Transparency;
 	}
-	public void setTransparency(double transparency) {
+	public void setTransparency(float transparency) {
 		Transparency = transparency;
 	}
 	@Override
