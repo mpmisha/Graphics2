@@ -115,4 +115,15 @@ public class Vector {
 		this.setY(temp.getY());
 		this.setZ(temp.getZ());
 	}
+
+	public Vector multiplyByMatrix(float[][] rotationMatrix) {
+        int m = rotationMatrix.length;
+        int n = rotationMatrix[0].length;
+        float[] x = {this.getX(),this.getY(),this.getZ()};
+        float[] y = new float[m];
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                y[i] += (rotationMatrix[i][j] * x[j]);
+        return new Vector(y[0],y[1],y[2]);
+    }
 }

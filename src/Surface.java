@@ -20,6 +20,11 @@ public abstract class Surface {
 		this.mat_idx = mat_idx;
 	
 	}
+	
+	public Surface(Material material, int mat_idx) {
+		this.material = material;
+		this.mat_idx = mat_idx;
+	}
 
 	public Material getMaterial() {
 		return material;
@@ -47,9 +52,8 @@ public abstract class Surface {
 
 	public abstract Intersection findIntersection(Ray ray);
 
-	public Vector getNormal(Point pointOfIntersection) {
-		return pointOfIntersection.Subsract(this.getCenterPoint());
-	}
+	public abstract Vector getNormal(Point pointOfIntersection);
+	
 	
 	
 }

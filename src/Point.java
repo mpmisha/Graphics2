@@ -90,7 +90,18 @@ public class Point {
 	public Vector Subsract(Point other) {
 		return new Vector(this.getX()-other.getX(),this.getY()-other.getY(),this.getZ()-other.getZ());
 	}
+
 	
+	public Point multiplyByMatrix(float[][] rotationMatrix) {
+        int m = rotationMatrix.length;
+        int n = rotationMatrix[0].length;
+        float[] x = {this.getX(),this.getY(),this.getZ()};
+        float[] y = new float[m];
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                y[i] += (rotationMatrix[i][j] * x[j]);
+        return new Point(y[0],y[1],y[2]);
+    }
 	
 	
 	

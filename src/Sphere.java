@@ -60,33 +60,16 @@ public class Sphere extends Surface {
 		
 		return inter;
 		
-//		float b,c,squred_d,squred_r;
-//		
-//		float disc, solution;
-//		float t1, t2,t_ca,t_hc, t, t_min;
-//		
-//		Vector distance = new Vector(ray.getOrigin(), this.getCenterPoint());
-//		t_ca = distance.dotProdcut(ray.getDiraction());
-//		
-//		if(t_ca<0) return null;
-//		
-//		squred_d = distance.dotProdcut(distance)-t_ca*t_ca;
-//		squred_r= this.getRadius()*this.getRadius();
-//		if(squred_d>squred_r) return null;
-//		
-//		t_hc= Math.sqrt(squred_r-squred_d);	
-//		t1 = t_ca - t_hc;
-//		t2 = t_ca + t_hc;
-//		
-//		t_min = Math.min(t1, t2);
-//		
-//		Point intersection = new Point(ray.getOrigin());
-//		intersection.mac(t_min, ray.getDiraction());
-//		return new Intersection(t_min, intersection, this);
-		
+
 		
 		
 	}
-	
+	@Override
+	public Vector getNormal(Point pointOfIntersection)
+	{
+				Vector n =  pointOfIntersection.Subsract(this.getCenterPoint());
+				n.Normalize();
+				return n;
+	}
 	
 }

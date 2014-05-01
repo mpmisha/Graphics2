@@ -170,11 +170,11 @@ public class RayTracer {
 				}
 				else if (code.equals("pln"))
 				{
-					Point centerPoint = new Point(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
+					Vector normal = new Vector(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
 					int offset = Integer.parseInt(params[3]);
 					int mat_idx = Integer.parseInt(params[4]);
 					//new plane - add material info later
-					Plane plane = new Plane(null, centerPoint, mat_idx, offset);
+					Plane plane = new Plane(null, normal, mat_idx, offset);
 					plane.setId(surfaceCount++);
 					surfaceList.add(plane);
                                         
@@ -183,10 +183,19 @@ public class RayTracer {
 				}
 				else if (code.equals("elp"))
 				{
-					//second part
-					
-                                        // Add code here to parse ellipsoid parameters
-
+					float [][] rotationMatrix = new float[3][3];
+					Point centerPoint = new Point(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
+					int k = 3;
+					for (int i = 0; i < rotationMatrix.length; i++) {
+						for (int j = 0; j < rotationMatrix[0].length; j++) {
+							rotationMatrix[i][j] = Float.parseFloat(params[k++]);
+						}
+					}
+					int mat_idx = Integer.parseInt(params[12]);
+					Ellipsoid ellipse = new Ellipsoid(null, centerPoint, rotationMatrix, mat_idx);
+					ellipse.setId(surfaceCount++);
+					surfaceList.add(ellipse);
+					if (DEBUG) System.out.println(ellipse.toString());
 					System.out.println(String.format("Parsed ellipsoid (line %d)", lineNum));
 				}
 				else if (code.equals("lgt"))
