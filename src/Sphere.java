@@ -19,38 +19,36 @@ public class Sphere extends Surface {
 
 	@Override
 	public String toString() {
-		return "Sphere [radius=" + radius + "]";
+		return "Sphere[radius=" + radius + "]";
 	}
 
 	@Override
 	public Intersection findIntersection(Ray ray) {
-		float t_ca,squred_d,squred_r,t_hc,t1,t2;
-		Vector v,L,p1,p2;
-		Intersection inter;
-		Point P0;
 		
-		P0 = ray.getOrigin();
-		v = ray.getDiraction();
+		Point P0 = ray.getOrigin();
+		Vector v = ray.getDiraction();
 		v.Normalize();
 		
-		L = new Vector(this.getCenterPoint()).vectorSubsract(new Vector(P0));
+		Vector L = new Vector(this.getCenterPoint()).vectorSubsract(new Vector(P0));
 		
-		t_ca = L.dotProdcut(v);
+		float t_ca = L.dotProdcut(v);
 		if(t_ca<0) return null;
 		
-		squred_d = L.dotProdcut(L) - (t_ca*t_ca);
-		squred_r=this.getRadius()*this.getRadius();
+		float squred_d = L.dotProdcut(L) - (t_ca*t_ca);
+		float squred_r=this.getRadius()*this.getRadius();
 		if(squred_d>squred_r) return null;
 		
-		t_hc=(float)Math.sqrt(squred_r-squred_d);
-		t1 = t_ca-t_hc;
-		t2 = t_ca+t_hc;
+		float t_hc=(float)Math.sqrt(squred_r-squred_d);
+		float t1 = t_ca-t_hc;
+		float t2 = t_ca+t_hc;
 		
-		p1=new Vector(P0).vectorAdd(v.multiplyByScalar(t1));
-		p2=new Vector(P0).vectorAdd(v.multiplyByScalar(t2));
+		Vector p1=new Vector(P0).vectorAdd(v.multiplyByScalar(t1));
+		Vector p2=new Vector(P0).vectorAdd(v.multiplyByScalar(t2));
 		
 		Vector temp_p1=new Vector(ray.getOrigin()).vectorSubsract(p1);
 		Vector temp_p2=new Vector(ray.getOrigin()).vectorSubsract(p2);
+		
+		Intersection inter;
 		
 		if (temp_p1.GetMagnitude()<=temp_p2.GetMagnitude()){ 
 			inter = new Intersection(t1, new Point(p1), this);
@@ -59,9 +57,6 @@ public class Sphere extends Surface {
 		}
 		
 		return inter;
-		
-
-		
 		
 	}
 	@Override

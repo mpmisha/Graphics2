@@ -1,49 +1,63 @@
 public class Vector {
 
 	private float x,y,z;
-	private float length;
+	
 	
 	public Vector(float x, float y, float z) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.length =(float) Math.sqrt(x*x + y*y + z*z);
+		
 	}
 	
 	public Vector(){
 		this(0.0f,0.0f,0.0f);
-		this.length = (float)Math.sqrt(x*x + y*y + z*z);
+		
 	}
 	
 	public Vector(Point dest, Point origin) {
     	x = dest.getX() - origin.getX();
     	y = dest.getY() - origin.getY();
     	z = dest.getZ() - origin.getZ();
-    	this.length =(float) Math.sqrt(x*x + y*y + z*z);
+    	
     }
 	
 	public Vector(Point dest, Vector direction) {
     	x = dest.getX() - direction.getX();
     	y = dest.getY() - direction.getY();
     	z = dest.getZ() - direction.getZ();
-    	this.length =(float) Math.sqrt(x*x + y*y + z*z);
+    	
     }
 	
+	public float[] AsArray()
+	{
+		float [] res = {this.getX(),this.getY(),this.getZ()};
+		return (res);
+	}
+	
 	public Vector(Point p){
-		x =p.getX();
-		y= p.getY();
-		z=p.getZ();
+		x = p.getX();
+		y = p.getY();
+		z = p.getZ();
+		
 	}
 	
 	public Vector(Vector other){
 		this.x = other.x;
 		this.y = other.y;
 		this.z = other.z;
-		this.length =(float) Math.sqrt(x*x + y*y + z*z);
+		
 	}
 	
 	
+	public Vector(Color other) {
+		this.x=other.getR();
+		this.y=other.getG();
+		this.z=other.getB();
+		
+	}
+
 	public Vector multiplyByScalar(float scalar){
 		return (new Vector(this.getX()*scalar,this.getY()*scalar,this.getZ()*scalar));
 	}
@@ -83,12 +97,7 @@ public class Vector {
 	public void setZ(float z) {
 		this.z = z;
 	}
-	public float getLength() {
-		return length;
-	}
-	public void setLength(float length) {
-		this.length = length;
-	}
+	
 	public void scale(float d){		
 		this.x *= d;
 		this.y *= d;
@@ -116,14 +125,19 @@ public class Vector {
 		this.setZ(temp.getZ());
 	}
 
-	public Vector multiplyByMatrix(float[][] rotationMatrix) {
-        int m = rotationMatrix.length;
-        int n = rotationMatrix[0].length;
+	public Vector multiplyByMatrix(Matrix rotationMatrix) {
+		int m = rotationMatrix.getNrows();
+        int n = rotationMatrix.getNcols();
         float[] x = {this.getX(),this.getY(),this.getZ()};
         float[] y = new float[m];
         for (int i = 0; i < m; i++)
-            for (int j = 0; j < n; j++)
-                y[i] += (rotationMatrix[i][j] * x[j]);
+        	for (int j = 0; j < n; j++)
+        		y[i] += ((float)rotationMatrix.getValueAt(i,j) * x[j]);
         return new Vector(y[0],y[1],y[2]);
     }
+	
+	@Override
+	public String toString() {
+		return "{" + x + "," + y + "," + z + "}";
+	}
 }

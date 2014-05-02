@@ -9,10 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
-
-import java.util.LinkedList;
-
 import javax.imageio.ImageIO;
 
 
@@ -183,12 +179,11 @@ public class RayTracer {
 				}
 				else if (code.equals("elp"))
 				{
-					float [][] rotationMatrix = new float[3][3];
+					Matrix rotationMatrix = new Matrix(3,3);
 					Point centerPoint = new Point(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
-					int k = 3;
-					for (int i = 0; i < rotationMatrix.length; i++) {
-						for (int j = 0; j < rotationMatrix[0].length; j++) {
-							rotationMatrix[i][j] = Float.parseFloat(params[k++]);
+					for (int i = 0; i < rotationMatrix.getNcols(); i++) {
+						for (int j = 0; j < rotationMatrix.getNrows(); j++) {
+							rotationMatrix.setValueAt(i,j, Float.parseFloat(params[3+3*i+j]));
 						}
 					}
 					int mat_idx = Integer.parseInt(params[12]);
@@ -245,34 +240,25 @@ public class RayTracer {
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
 		Color hitColor = new Color();
 		//Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
-			for (int y = 0; y < this.imageHeight; y++) {
-				for (int x = 0; x < this.imageWidth; x++) {
+			for (int x = 0; x < this.imageHeight; x++) {
+				for (int y = 0; y < this.imageWidth; y++) {
 					//System.out.print(x+","+y);
 					Ray ray = camera.constructRayFomPixel((float)x,(float)y);
 					Intersection hit = findNearestIntersection(ray);
-					if (hit==null) {
+					if (hit == null) 
+					{
 						hitColor = camera.getBackgroundColor();
-					}else{
+					}
+					else
+					{
 						hitColor = Color.getColor(hit,lightList,ray);	
 					}
 					colorVector = hitColor.ReturnColorBytes();
-					rgbData[y*this.imageWidth*3 + x*3 + 0] = (byte) colorVector.getR();
-					rgbData[y*this.imageWidth*3 + x*3 + 1] = (byte) colorVector.getG();
-					rgbData[y*this.imageWidth*3 + x*3 + 2] = (byte) colorVector.getB();
+					rgbData[y*this.imageWidth*3 + x*3 + 0] = (byte) Color.saturate(colorVector.getR());
+					rgbData[y*this.imageWidth*3 + x*3 + 1] = (byte) Color.saturate(colorVector.getG());
+					rgbData[y*this.imageWidth*3 + x*3 + 2] = (byte) Color.saturate(colorVector.getB());
 				}
 			}
-		
-		
-		
-				// Put your ray tracing code here!
-                //
-                // Write pixel color values in RGB format to rgbData:
-                // Pixel [x, y] red component is in rgbData[(y * this.imageWidth + x) * 3]
-                //            green component is in rgbData[(y * this.imageWidth + x) * 3 + 1]
-                //             blue component is in rgbData[(y * this.imageWidth + x) * 3 + 2]
-                //
-                // Each of the red, green and blue components should be a byte, i.e. 0-255
-
 
 		long endTime = System.currentTimeMillis();
 		Long renderTime = endTime - startTime;
@@ -289,18 +275,21 @@ public class RayTracer {
 	}
 	
 	public Intersection findNearestIntersection(Ray ray){
-		Intersection tempInter, minInter=new Intersection(Float.MAX_VALUE, null, null);
 		
+		Intersection tempInter, minInter = new Intersection(Float.MAX_VALUE, null, null);
 		for (Surface surface :  surfaceList) {
 			tempInter = surface.findIntersection(ray);
-			if (tempInter!=null){
-				if (tempInter.getDistance()<minInter.getDistance()){
+			if (tempInter != null)
+			{
+				if (tempInter.getDistance() < minInter.getDistance())
+				{
 					minInter=tempInter;
 				}
 			}
+			
 		}
-
-		if (minInter.getPointOfIntersection()==null) return null;
+		
+		if (minInter.getPointOfIntersection() == null) return null;
 		else return minInter;
 	}
 

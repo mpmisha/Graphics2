@@ -35,7 +35,7 @@ public class Point {
 	
 	
 	public Point(){
-		this(0,0,0);
+		this(0.0f,0.0f,0.0f);
 	}
 
 	
@@ -84,7 +84,7 @@ public class Point {
 	
 	@Override
 	public String toString() {
-		return "Point [" + x + "," + y + "," + z + "]";
+		return "{" + x + "," + y + "," + z + "}";
 	}
 
 	public Vector Subsract(Point other) {
@@ -92,14 +92,14 @@ public class Point {
 	}
 
 	
-	public Point multiplyByMatrix(float[][] rotationMatrix) {
-        int m = rotationMatrix.length;
-        int n = rotationMatrix[0].length;
+	public Point multiplyByMatrix(Matrix rotationMatrix) {
+		int m = rotationMatrix.getNrows();
+        int n = rotationMatrix.getNcols();
         float[] x = {this.getX(),this.getY(),this.getZ()};
         float[] y = new float[m];
         for (int i = 0; i < m; i++)
-            for (int j = 0; j < n; j++)
-                y[i] += (rotationMatrix[i][j] * x[j]);
+        	for (int j = 0; j < n; j++)
+        		y[i] += ((float)rotationMatrix.getValueAt(i,j) * x[j]);
         return new Point(y[0],y[1],y[2]);
     }
 	

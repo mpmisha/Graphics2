@@ -16,6 +16,12 @@ public class Camera {
 	private int shadowRays;
 	private int recursionLevel;
 	private float angle;
+	public float getAngle() {
+		return angle;
+	}
+	public void setAngle(float angle) {
+		this.angle = angle;
+	}
 	private Vector P1;
 	private int imageWidth;
 	
@@ -135,7 +141,10 @@ public class Camera {
 	public void setRecursionLevel(int recursionLevel) {
 		this.recursionLevel = recursionLevel;
 	}
-	public Ray constructRayFomPixel(float x, float y) { 
+	
+	
+	public Ray constructRayFomPixel(float x, float y) 
+	{ 
 		Vector p,v;
 		
 		float horizontalFactor = (float)(((float)(x+0.5f) / (float)this.imageWidth) * 2 * screenDistance * (float)Math.tan(angle));
@@ -149,6 +158,6 @@ public class Camera {
 		v = p.vectorSubsract(new Vector(position));
 		v.Normalize();
 			
-		return new Ray(position, v, p);  
+		return new Ray(position, v);  
 	}
 }

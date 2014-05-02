@@ -4,21 +4,15 @@ public class Ray {
 
 	private Point origin;
 	private Vector diraction;
-	private Vector imagePoint;
+	
 	
 	public Ray(Point origin, Vector diraction) {
 		super();
 		this.origin = origin;
 		this.diraction = diraction;
+		//this.diraction.Normalize();
 	}
-	
-	public Ray(Point origin, Vector diraction,Vector imagePoint) {
-		super();
-		this.origin = origin;
-		this.diraction = diraction;
-		this.imagePoint = imagePoint;
-	}	
-	
+		
 	public Ray(){
 		this(new Point(),new Vector());
 	}
@@ -39,6 +33,11 @@ public class Ray {
 		this.diraction = diraction;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "[o:"+origin+" "+"d:"+diraction+"]";
+	}
 	
 	
 }

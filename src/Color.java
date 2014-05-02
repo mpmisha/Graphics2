@@ -50,8 +50,8 @@ public class Color {
 	}
 	
 	public static float saturate(float n){
-		if(n > 1.0f)
-			n = 1.0f;
+		if(n > 255.0f)
+			n = 255.0f;
 		else if (n < 0.0f)
 			n = 0.0f;
 		return n;
@@ -67,25 +67,28 @@ public class Color {
 			Vector light_Direction= new Vector(l.getPosition().Subsract(hit.getPointOfIntersection()));
 			light_Direction.Normalize();
 			Color i_p = l.getColor(); 
-			
 			float NL = surf_Normal.dotProdcut(light_Direction);
 			if (NL<0) continue;
-			
-			colorIllum=colorIllum.vectorAdd(new Vector(K_d.getR()*i_p.getR()*NL,K_d.getG()*i_p.getG()*NL,K_d.getB()*i_p.getB()*NL));
+			colorIllum = colorIllum.vectorAdd(new Vector(K_d.getR()*i_p.getR()*NL,K_d.getG()*i_p.getG()*NL,K_d.getB()*i_p.getB()*NL));
 			
 			
 			//get specular value
 			Vector v = ray.getDiraction().multiplyByScalar(-1.0f);
-			
-			Vector r = surf_Normal.multiplyByScalar(((light_Direction.dotProdcut(surf_Normal))*2.0f)).vectorSubsract(light_Direction);
-			
+			v.Normalize();
+			Vector L2 = light_Direction.multiplyByScalar(2.0f);
+			float L2DotN = L2.dotProdcut(surf_Normal);
+			Vector L2DotNN = surf_Normal.multiplyByScalar(L2DotN);
+			Vector r =L2DotNN.vectorSubsract(light_Direction); 
+			r.Normalize();
 			float rv = r.dotProdcut(v);
 			
 			if (rv<0) continue;
 			
 			float rv_n =(float) Math.pow(rv, hit.getSurface().getMaterial().getPhongCoeffticient());
 			Color k_s = hit.getSurface().getMaterial().getSpecularColor();
+			
 			colorIllum= colorIllum.vectorAdd(new Vector(k_s.getR()*i_p.getR()*l.getSpecularIntensity()*rv_n,k_s.getG()*l.getSpecularIntensity()*i_p.getG()*rv_n,k_s.getB()*l.getSpecularIntensity()*i_p.getB()*rv_n));
+		
 		}
 		
 		return new Color(colorIllum);

@@ -2,6 +2,11 @@
  * This Class represents a point of intersection between a ray and a surface in the scene
  */
 public class Intersection {
+	
+	float distance;
+	Point pointOfIntersection;
+	Surface surface;
+	
 	public float getDistance() {
 		return distance;
 	}
@@ -32,10 +37,7 @@ public class Intersection {
 	}
 
 
-	float distance;
-	Point pointOfIntersection;
-	Surface surface;
-	
+
 	
 	public Intersection(float distance, Point pointOfIntersection, Surface surface) 
 	{
@@ -44,4 +46,9 @@ public class Intersection {
 		this.surface = surface;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "[D:"+distance+" "+"P:"+pointOfIntersection+" S:"+surface+"]";
+	}
 }
