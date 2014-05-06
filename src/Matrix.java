@@ -1,3 +1,11 @@
+/**
+ * @author Jenia
+ *
+ */
+/**
+ * @author Jenia
+ *
+ */
 public class Matrix {
 
 	private int nrows;
@@ -16,6 +24,12 @@ public class Matrix {
 		data = new float[nrows][ncols];
 	}
 
+	/**
+	 * @param a,b,c
+	 * 
+	 * generates a 3x3 matrix from 3 vectors
+	 * 
+	 */
 	public Matrix(Vector a, Vector b, Vector c) 
 	{
 		this.data = new float[3][a.AsArray().length];
@@ -59,10 +73,18 @@ public class Matrix {
 		return data;
 	}
 
+	/**
+	 * @param data
+	 * initialize matrix data
+	 */
 	public void setData(float[][] data) {
 		this.data = data;
 	}
 
+	/**
+	 * @param matrix T
+	 * @return T^T
+	 */
 	public static Matrix transpose(Matrix matrix) {
 		Matrix traspose = new Matrix(matrix.getNcols(), matrix.getNrows());
 		for (int i = 0; i < traspose.getNrows(); i++) {
@@ -73,7 +95,12 @@ public class Matrix {
 		return traspose;
 	}
 	
-	//under the assumption that the matrix is always square
+	
+	/**
+	 * @param matrix A
+	 * 			under the assumption that the matrix is always square
+	 * @return det(A)
+	 */
 	public static float determinant(Matrix matrix) {
 		if (matrix.data.length == 2) {
 			return (matrix.getValueAt(0, 0) * matrix.getValueAt(1, 1))
@@ -87,6 +114,12 @@ public class Matrix {
 		return sum;
 	}
 
+	/**
+	 * @param matrix of size [a][b]
+	 * @param excluding_row
+	 * @param excluding_col
+	 * @return return a matrix of size [a-1][b-1] without the row "excluding_row" and without column "excluding_col" 
+	 */
 	public static Matrix createSubMatrix(Matrix matrix, int excluding_row,
 			int excluding_col) {
 		Matrix mat = new Matrix(matrix.getNrows() - 1, matrix.getNcols() - 1);
@@ -104,52 +137,44 @@ public class Matrix {
 		}
 		return mat;
 	}
-
-//	public static Matrix cofactor(Matrix matrix) {
-//		Matrix mat = new Matrix(matrix.getNrows(), matrix.getNcols());
-//		for (int i = 0; i < matrix.getNrows(); i++) {
-//			for (int j = 0; j < matrix.getNcols(); j++) {
-//				mat.setValueAt( i , j, sign(i) * (float)Math.pow(-1, j) * determinant(createSubMatrix(matrix, i, j)));
-//			}
-//		}
-//		return mat;
-//	}
-//	
-//	private static float sign(int i) {
-//		return (i==0) ? 1 : (i/Math.abs(i));
-//	}
-
+	
+	/**
+	 * @param A - 3x3 matrix to inverse
+	 * @return inverse Matrix
+	 */
 	public static Matrix Inverse(Matrix A) {
 		/*
 		 * This Function computes the inverse of a given Matrix under the assumption that the matrix is 3x3 and his determinant differs from 0  
 		 * */
-		double a = A.getValueAt(0, 0)*( A.getValueAt(1, 1)*A.getValueAt(2, 2) - A.getValueAt(2, 1)*A.getValueAt(1, 2) );
-		double b = A.getValueAt(0, 1)*( A.getValueAt(1, 0)*A.getValueAt(2, 2) - A.getValueAt(2, 0)*A.getValueAt(1, 2) );
-		double c = A.getValueAt(0, 2)*( A.getValueAt(1, 0)*A.getValueAt(2, 1) - A.getValueAt(2, 0)*A.getValueAt(1, 1) );
-		float det = (float)(a - b + c);
-
-		Matrix B = Matrix.transpose(A);
+		float det = determinant(A);
+		float[][] B = new float[3][3];
+		for (int i = 0; i < B.length; i++) {
+			for (int j = 0; j < B[0].length; j++) {
+				B[i][j]=A.getValueAt(j, i);
+			}
+		}
+		Vector a1 = new Vector(( B[1][1]*B[2][2]-B[2][1]*B[1][2]),
+							   -(B[1][0]*B[2][2]-B[2][0]*B[1][2]),
+							  	 B[1][0]*B[2][1]-B[2][0]*B[1][1]);
+		Vector a2 = new Vector(-(B[0][1]*B[2][2]-B[2][1]*B[0][2]),
+								(B[0][0]*B[2][2]-B[2][0]*B[0][2]),
+							   -(B[0][0]*B[2][1]-B[2][0]*B[0][1]));
+		Vector a3 = new Vector(( B[0][1]*B[1][2]-B[1][1]*B[0][2]),
+							   -(B[0][0]*B[1][2]-B[1][0]*B[1][2]),
+							  	 B[0][0]*B[1][1]-B[1][0]*B[0][1]);
 		
-		
-		Vector a1 = new Vector(B.getValueAt(1, 1)*B.getValueAt(2, 2) - B.getValueAt(2, 1)*B.getValueAt(1, 2),
-				-(B.getValueAt(1, 0)*B.getValueAt(2, 2) - B.getValueAt(2, 0)*B.getValueAt(1, 2)),
-				 B.getValueAt(1, 0)*B.getValueAt(2, 1) - B.getValueAt(2, 0)*B.getValueAt(1, 1));
-		
-		Vector a2 = new Vector(-(B.getValueAt(0, 1)*B.getValueAt(2, 2) - B.getValueAt(2, 1)*B.getValueAt(0, 2)),
-				B.getValueAt(0, 0)*B.getValueAt(2, 2) - B.getValueAt(2, 0)*B.getValueAt(0, 2),
-				-(B.getValueAt(0, 0)*B.getValueAt(2, 1) - B.getValueAt(2, 0)*B.getValueAt(0, 1)));
-		
-		Vector a3 = new Vector(B.getValueAt(0, 1)*B.getValueAt(1, 2) - B.getValueAt(1, 1)*B.getValueAt(0, 2),
-				 -(B.getValueAt(0, 0)*B.getValueAt(1, 2) - B.getValueAt(1, 0)*B.getValueAt(1, 2)),
-				 B.getValueAt(0, 0)*B.getValueAt(1, 1) - B.getValueAt(1, 0)*B.getValueAt(0, 1));
-
-		Matrix C = new Matrix(a1.multiplyByScalar(1/det), a2.multiplyByScalar(1/det), a3.multiplyByScalar(1/det));
+		Matrix C = new Matrix(a1,a2,a3);
+		C=C.multiplyByScalar(1/det);
 		return C;
 
 	}
 	
 
-	public Matrix multiplyByConstant(float d) {
+	/**
+	 * @param d
+	 * @return M*d
+	 */
+	public Matrix multiplyByScalar(float d) {
 		Matrix newMatrix = new Matrix(this.data);
 		for (int i = 0; i < this.data.length; i++) {
 			for (int j = 0; j < data[0].length; j++) {
@@ -158,9 +183,4 @@ public class Matrix {
 		}
 		return newMatrix;
 	}
-	
-	
-
-	
-
 }
