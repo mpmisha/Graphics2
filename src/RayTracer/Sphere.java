@@ -1,3 +1,4 @@
+package RayTracer;
 
 public class Sphere extends Surface {
 	private float radius;
@@ -26,9 +27,7 @@ public class Sphere extends Surface {
 	public Intersection findIntersection(Ray ray) {
 		
 		Point P0 = ray.getOrigin();
-		Vector v = ray.getDiraction();
-		v.Normalize();
-		
+		Vector v = ray.getDiraction().Normalize();
 		Vector L = new Vector(this.getCenterPoint()).vectorSubsract(new Vector(P0));
 		
 		float t_ca = L.dotProdcut(v);
@@ -62,9 +61,7 @@ public class Sphere extends Surface {
 	@Override
 	public Vector getNormal(Point pointOfIntersection)
 	{
-				Vector n =  pointOfIntersection.Subsract(this.getCenterPoint());
-				n.Normalize();
-				return n;
+				return pointOfIntersection.Subsract(this.getCenterPoint()).Normalize();
 	}
 	
 }

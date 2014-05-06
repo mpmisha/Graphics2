@@ -1,4 +1,4 @@
-
+package RayTracer;
 
 import java.awt.Transparency;
 import java.awt.color.*;
@@ -11,20 +11,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-
-/**
- *  Main class for ray tracing exercise.
- *  
- *  1) constructRayFomPixel								-Michael
- *	2) find-intersection 								-Hadar
- *  3)each matirial implements nearstIntersection 		- Hadar
- *  4)calcColor											-Michael
- *  
- */
-
 public class RayTracer {
 	public static final boolean DEBUG=false;
-	public static final Color BGCOLOR=new Color(0, 50, 21);
 	
 	
 	public int imageWidth;
@@ -169,7 +157,6 @@ public class RayTracer {
 					Vector normal = new Vector(Float.parseFloat(params[0]),Float.parseFloat(params[1]),Float.parseFloat(params[2]));
 					int offset = Integer.parseInt(params[3]);
 					int mat_idx = Integer.parseInt(params[4]);
-					//new plane - add material info later
 					Plane plane = new Plane(null, normal, mat_idx, offset);
 					plane.setId(surfaceCount++);
 					surfaceList.add(plane);
@@ -205,9 +192,6 @@ public class RayTracer {
 					
 					lightList.add(light);
 					if (DEBUG) System.out.println(light.toString());
-					
-                                        // Add code here to parse light parameters
-
 					System.out.println(String.format("Parsed light (line %d)", lineNum));
 				}
 				else
@@ -238,11 +222,9 @@ public class RayTracer {
 		Color colorVector;
 		// Create a byte array to hold the pixel data:
 		byte[] rgbData = new byte[this.imageWidth * this.imageHeight * 3];
-		Color hitColor = new Color();
-		//Color[][] pixel = new Color[this.imageWidth][this.imageHeight];	
+		Color hitColor = new Color();	
 			for (int x = 0; x < this.imageHeight; x++) {
 				for (int y = 0; y < this.imageWidth; y++) {
-					//System.out.print(x+","+y);
 					Ray ray = camera.constructRayFomPixel((float)x,(float)y);
 					Intersection hit = findNearestIntersection(ray);
 					if (hit == null) 
@@ -334,6 +316,6 @@ public class RayTracer {
 	public static class RayTracerException extends Exception {
 		public RayTracerException(String msg) {  super(msg); }
 	}
-	
+		
 	
 }

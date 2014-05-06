@@ -1,3 +1,4 @@
+package RayTracer;
 /**
  * @author Jenia
  *
@@ -143,9 +144,6 @@ public class Matrix {
 	 * @return inverse Matrix
 	 */
 	public static Matrix Inverse(Matrix A) {
-		/*
-		 * This Function computes the inverse of a given Matrix under the assumption that the matrix is 3x3 and his determinant differs from 0  
-		 * */
 		float det = determinant(A);
 		float[][] B = new float[3][3];
 		for (int i = 0; i < B.length; i++) {

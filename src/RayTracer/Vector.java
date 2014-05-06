@@ -1,3 +1,4 @@
+package RayTracer;
 public class Vector {
 
 	private float x,y,z;
@@ -116,13 +117,10 @@ public class Vector {
 	public float GetMagnitude() {
 		return (float) Math.sqrt(x*x + y*y + z*z);
 	}
-	public void Normalize() {
-		if(GetMagnitude() == 0)
-			return;
-		Vector temp = this.multiplyByScalar(1 / GetMagnitude());
-		this.setX(temp.getX());
-		this.setY(temp.getY());
-		this.setZ(temp.getZ());
+
+	public Vector Normalize() {
+		if(GetMagnitude() == 0)	return null;
+		return this.multiplyByScalar(1 / GetMagnitude());
 	}
 
 	public Vector multiplyByMatrix(Matrix rotationMatrix) {

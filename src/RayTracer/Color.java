@@ -1,3 +1,4 @@
+package RayTracer;
 import java.util.ArrayList;
 
 
@@ -65,7 +66,8 @@ public class Color {
 			Color K_d = hit.surface.getMaterial().getDiffuseColor();
 			Vector surf_Normal = hit.surface.getNormal(hit.pointOfIntersection);
 			Vector light_Direction= new Vector(l.getPosition().Subsract(hit.getPointOfIntersection()));
-			light_Direction.Normalize();
+			//light_Direction.Normalize();
+			light_Direction = light_Direction.Normalize();
 			Color i_p = l.getColor(); 
 			float NL = surf_Normal.dotProdcut(light_Direction);
 			if (NL<0) continue;
@@ -74,12 +76,14 @@ public class Color {
 			
 			//get specular value
 			Vector v = ray.getDiraction().multiplyByScalar(-1.0f);
-			v.Normalize();
+			//v.Normalize();
+			v=v.Normalize();
 			Vector L2 = light_Direction.multiplyByScalar(2.0f);
 			float L2DotN = L2.dotProdcut(surf_Normal);
 			Vector L2DotNN = surf_Normal.multiplyByScalar(L2DotN);
 			Vector r =L2DotNN.vectorSubsract(light_Direction); 
-			r.Normalize();
+			//r.Normalize();
+			r=r.Normalize();
 			float rv = r.dotProdcut(v);
 			
 			if (rv<0) continue;

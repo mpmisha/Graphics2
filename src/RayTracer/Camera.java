@@ -1,5 +1,4 @@
-import java.awt.Image;
-
+package RayTracer;
 
 /**
  * @author Jenia
@@ -62,13 +61,16 @@ public class Camera {
 		Vector tempUp,tempRight,positionVector;
 		
 		this.towards = new Vector(this.lookAtPoint).vectorSubsract(new Vector(this.position));
-		this.towards.Normalize();
+		this.towards=this.towards.Normalize();
+		//this.towards.Normalize();
 		
 		tempRight = this.upVector.crossProd(towards);
-		tempRight.Normalize();
+		tempRight = tempRight.Normalize();
+		//tempRight.Normalize();
 		
 		tempUp = tempRight.crossProd(towards);
-		tempUp.Normalize();
+		tempUp = tempUp.Normalize();
+		//tempUp.Normalize();
 		
 		this.upVector=tempUp;
 		this.right=tempRight;
@@ -156,7 +158,8 @@ public class Camera {
 		p=p.vectorAdd(upVector.multiplyByScalar(verticalFactor));
 		
 		v = p.vectorSubsract(new Vector(position));
-		v.Normalize();
+		v=v.Normalize();
+		//v.Normalize();
 			
 		return new Ray(position, v);  
 	}

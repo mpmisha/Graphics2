@@ -1,3 +1,4 @@
+package RayTracer;
 
 public class Ellipsoid extends Surface{
 	private Matrix rotationMatrix = new Matrix(3,3);
@@ -25,7 +26,6 @@ public class Ellipsoid extends Surface{
 		//create transformed ray
 		Point originTransformed = ray.getOrigin().multiplyByMatrix(this.rotationMatrix);
 		Vector directionTrasnformed = ray.getDiraction().multiplyByMatrix(this.rotationMatrix);
-		//directionTrasnformed.Normalize(); 
 		Ray rayTransformed = new Ray(originTransformed, directionTrasnformed);
 		//find transformed intersection  point
 		Intersection IntersectionTransformed = unitSphere.findIntersection(rayTransformed);
@@ -36,7 +36,6 @@ public class Ellipsoid extends Surface{
 		//transform the point of intersection back to normal world
 		Point newPointOfIntersection = IntersectionTransformed.getPointOfIntersection().multiplyByMatrix(Matrix.Inverse(this.rotationMatrix));
 		Vector newDistance = newPointOfIntersection.Subsract(ray.getOrigin());
-		//float dist = newDistance.GetMagnitude() / ((ray.getDiraction().multiplyByMatrix(rotationMatrix)).GetMagnitude());
 		return new Intersection(newDistance.GetMagnitude(), newPointOfIntersection, this);
 	}
 
@@ -52,9 +51,7 @@ public class Ellipsoid extends Surface{
 		Vector normTransformed = unitSphere.getNormal(pointOfIntersectionTransformed);
 		//transform back to ellipsoid world
 		
-		Vector norm = normTransformed.multiplyByMatrix(Matrix.transpose(rotationMatrix));
-		norm.Normalize();
-		return norm;		
+		return normTransformed.multiplyByMatrix(Matrix.transpose(rotationMatrix)).Normalize();
 	}
 	
 	

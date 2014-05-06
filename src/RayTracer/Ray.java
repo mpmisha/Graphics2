@@ -1,3 +1,4 @@
+package RayTracer;
 
 public class Ray {
 
@@ -10,7 +11,6 @@ public class Ray {
 		super();
 		this.origin = origin;
 		this.diraction = diraction;
-		//this.diraction.Normalize();
 	}
 		
 	public Ray(){

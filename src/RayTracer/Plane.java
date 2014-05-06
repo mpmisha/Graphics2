@@ -1,3 +1,4 @@
+package RayTracer;
 public class Plane extends Surface {
 	private float offset;
 	private Vector normal;
@@ -23,8 +24,7 @@ public class Plane extends Surface {
 	
 	@Override
 	public Intersection findIntersection(Ray ray) { 
-		Vector v = ray.getDiraction();
-		v.Normalize();
+		Vector v = ray.getDiraction().Normalize();
 		float f = this.normal.dotProdcut(new Vector(ray.getOrigin()));
 		float s = this.normal.dotProdcut(v);
 		float t = (this.offset - f) / s;

@@ -1,3 +1,4 @@
+package RayTracer;
 
 public class Light {
 	private Point position;

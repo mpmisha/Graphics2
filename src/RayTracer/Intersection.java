@@ -1,3 +1,4 @@
+package RayTracer;
 /**
  * This Class represents a point of intersection between a ray and a surface in the scene
  */
