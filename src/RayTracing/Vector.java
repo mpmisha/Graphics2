@@ -134,6 +134,14 @@ public class Vector {
         return new Vector(y[0],y[1],y[2]);
     }
 	
+	public Vector getReflection(Intersection hit) {
+		Vector surf_Normal = hit.getSurface().getNormal(hit.getPointOfIntersection());
+		Vector L2 =  this.multiplyByScalar(2.0f);
+		float L2DotN = L2.dotProdcut(surf_Normal);
+		Vector L2DotNN = surf_Normal.multiplyByScalar(L2DotN);
+		return (L2DotNN.vectorSubsract(this).Normalize()); 
+	}
+	
 	@Override
 	public String toString() {
 		return "{" + x + "," + y + "," + z + "}";

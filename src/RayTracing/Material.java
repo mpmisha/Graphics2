@@ -60,5 +60,10 @@ public class Material {
 				+ Transparency + "]";
 	}
 	
+	//scales the given reflection color to reflection parameters of the material
+	public Color scaleReflection(Color reflection) {
+		return new Color(reflection.getR()*this.getReflectionColor().getR(),reflection.getG()*this.getReflectionColor().getG(),reflection.getB()*this.getReflectionColor().getB());
+	}
+	
 	
 }

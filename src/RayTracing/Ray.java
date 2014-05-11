@@ -10,7 +10,7 @@ public class Ray {
 	public Ray(Point origin, Vector diraction) {
 		super();
 		this.origin = origin;
-		this.diraction = diraction;
+		this.diraction = diraction.Normalize();
 	}
 		
 	public Ray(){

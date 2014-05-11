@@ -159,7 +159,6 @@ public class Camera {
 		
 		v = p.vectorSubsract(new Vector(position));
 		v=v.Normalize();
-		//v.Normalize();
 			
 		return new Ray(position, v);  
 	}

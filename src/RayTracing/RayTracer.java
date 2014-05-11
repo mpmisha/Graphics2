@@ -18,7 +18,7 @@ public class RayTracer {
 	public int imageWidth;
 	public int imageHeight;
 	public Camera camera;
-	public ArrayList<Surface> surfaceList;
+	public static ArrayList<Surface> surfaceList;
 	public ArrayList<Material> materialList;
 	public ArrayList<Light> lightList;
 
@@ -229,7 +229,7 @@ public class RayTracer {
 					}
 					else
 					{
-						hitColor = Color.getColor(hit,lightList,ray);	
+						hitColor = Color.getColor(hit,lightList,ray,camera,7);	
 					}
 					colorVector = hitColor.ReturnColorBytes();
 					rgbData[y*this.imageWidth*3 + x*3 + 0] = (byte) Color.saturate(colorVector.getR());
@@ -252,14 +252,19 @@ public class RayTracer {
 
 	}
 	
-	public Intersection findNearestIntersection(Ray ray){
+	public static Intersection findNearestIntersection(Ray ray){
+		Intersection defaultIntersection = new Intersection(0.0f, null, null);
+		return findNearestIntersection(ray, defaultIntersection);
+	}
+	
+	public static Intersection findNearestIntersection(Ray ray,Intersection previousHit){
 		
 		Intersection tempInter, minInter = new Intersection(Float.MAX_VALUE, null, null);
 		for (Surface surface :  surfaceList) {
 			tempInter = surface.findIntersection(ray);
 			if (tempInter != null)
 			{
-				if (tempInter.getDistance() < minInter.getDistance())
+				if (tempInter.getDistance() < minInter.getDistance() && tempInter.getDistance() > previousHit.distance)
 				{
 					minInter=tempInter;
 				}
