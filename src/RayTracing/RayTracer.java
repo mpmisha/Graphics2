@@ -229,7 +229,7 @@ public class RayTracer {
 					}
 					else
 					{
-						hitColor = Color.getColor(hit,lightList,ray,camera,7);	
+						hitColor = Color.getColor(hit,lightList,ray,camera,camera.getRecursionLevel());	
 					}
 					colorVector = hitColor.ReturnColorBytes();
 					rgbData[y*this.imageWidth*3 + x*3 + 0] = (byte) Color.saturate(colorVector.getR());
